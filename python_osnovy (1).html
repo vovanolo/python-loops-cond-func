@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python: умови, цикли, функції — інтерактивний посібник</title>
+<style>
+:root{
+  --bg:#f6f7fb; --card:#ffffff; --text:#1f2430; --muted:#5b6475; --line:#e3e6ee;
+  --accent:#3b6cf6; --accent-soft:#e8eefe; --green:#1f9d55; --green-soft:#e3f6ea;
+  --red:#d63b3b; --red-soft:#fde8e8; --yellow:#e0a100; --yellow-soft:#fff6d6;
+  --purple:#7c3aed; --purple-soft:#efe6ff; --code-bg:#0f172a; --code-text:#e2e8f0;
+  --kw:#f472b6; --str:#86efac; --num:#fbbf24; --cm:#94a3b8; --fn:#7dd3fc;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;font-size:17px}
+header{background:linear-gradient(135deg,#1e3a8a,#3b6cf6 60%,#7c3aed);color:#fff;padding:48px 20px 36px;text-align:center}
+header h1{margin:0 0 10px;font-size:2.1rem}
+header p{margin:0;opacity:.92;max-width:760px;margin:0 auto;font-size:1.05rem}
+nav{position:sticky;top:0;z-index:50;background:#fff;border-bottom:1px solid var(--line);box-shadow:0 2px 10px rgba(0,0,0,.04)}
+nav .inner{max-width:1040px;margin:0 auto;display:flex;flex-wrap:wrap;gap:4px;padding:8px 12px;align-items:center}
+nav a{text-decoration:none;color:var(--text);padding:8px 12px;border-radius:8px;font-weight:600;font-size:.92rem}
+nav a:hover{background:var(--accent-soft);color:var(--accent)}
+#progressWrap{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+#progressBar{width:140px;height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+#progressFill{height:100%;width:0;background:var(--green);transition:width .4s}
+main{max-width:1040px;margin:0 auto;padding:24px 16px 80px}
+section.part{margin-top:48px}
+section.part>h2{font-size:1.9rem;margin:0 0 6px;padding-bottom:8px;border-bottom:3px solid var(--accent)}
+section.part>.lead{color:var(--muted);font-size:1.05rem;margin-bottom:20px}
+h3{font-size:1.35rem;margin:36px 0 10px}
+h4{font-size:1.1rem;margin:22px 0 8px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:20px 22px;margin:16px 0;box-shadow:0 1px 3px rgba(0,0,0,.03)}
+.box{border-left:5px solid var(--accent);background:var(--accent-soft);padding:14px 18px;border-radius:0 10px 10px 0;margin:14px 0}
+.box.ok{border-color:var(--green);background:var(--green-soft)}
+.box.warn{border-color:var(--yellow);background:var(--yellow-soft)}
+.box.err{border-color:var(--red);background:var(--red-soft)}
+.box.idea{border-color:var(--purple);background:var(--purple-soft)}
+.box b:first-child{display:block;margin-bottom:4px}
+pre.code{background:var(--code-bg);color:var(--code-text);padding:14px 18px;border-radius:10px;overflow-x:auto;font-family:"JetBrains Mono",Consolas,"Courier New",monospace;font-size:.93rem;line-height:1.55;margin:12px 0;tab-size:4}
+pre.code .kw{color:var(--kw);font-weight:600}pre.code .str{color:var(--str)}pre.code .num{color:var(--num)}pre.code .cm{color:var(--cm);font-style:italic}pre.code .fn{color:var(--fn)}
+.out{background:#111827;color:#a7f3d0;font-family:Consolas,monospace;padding:10px 16px;border-radius:0 0 10px 10px;margin-top:-12px;font-size:.92rem;border-top:1px dashed #374151;white-space:pre-wrap}
+.out::before{content:"▶ Вивід:";display:block;color:#9ca3af;font-size:.78rem;margin-bottom:4px;font-family:inherit}
+code{background:#eef0f5;padding:2px 6px;border-radius:5px;font-family:Consolas,monospace;font-size:.9em}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:.95rem}
+th,td{border:1px solid var(--line);padding:8px 12px;text-align:left}
+th{background:#f0f2f8}
+tr.hl td{background:var(--yellow-soft)}
+.btn{display:inline-block;background:var(--accent);color:#fff;border:0;padding:9px 16px;border-radius:8px;font-weight:600;cursor:pointer;font-size:.93rem;margin:4px 4px 4px 0;font-family:inherit}
+.btn:hover{filter:brightness(1.08)}.btn:disabled{opacity:.45;cursor:default}
+.btn.sec{background:#fff;color:var(--accent);border:2px solid var(--accent)}
+.btn.green{background:var(--green)}
+.btn.small{padding:5px 10px;font-size:.85rem}
+input[type=number],input[type=text],select{padding:8px 10px;border:2px solid var(--line);border-radius:8px;font-size:1rem;font-family:inherit;max-width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+textarea{width:100%;min-height:150px;font-family:Consolas,monospace;font-size:.95rem;padding:12px;border:2px solid var(--line);border-radius:10px;background:#0f172a;color:#e2e8f0}
+/* tracer */
+.tracer{display:grid;grid-template-columns:1.2fr 1fr;gap:16px;margin-top:12px}
+@media(max-width:760px){.tracer{grid-template-columns:1fr}}
+.tracer .lines{background:var(--code-bg);border-radius:10px;padding:10px 0;font-family:Consolas,monospace;font-size:.92rem;overflow-x:auto}
+.tracer .ln{display:flex;padding:3px 14px;color:var(--code-text);white-space:pre;transition:background .2s}
+.tracer .ln .n{width:28px;color:#64748b;flex-shrink:0;user-select:none}
+.tracer .ln.active{background:#facc15;color:#111}
+.tracer .ln.active .kw,.tracer .ln.active .str,.tracer .ln.active .num,.tracer .ln.active .fn,.tracer .ln.active .cm{color:#111}
+.tracer .ln.active .n{color:#333}
+.tracer .state{display:flex;flex-direction:column;gap:10px}
+.tracer .vars,.tracer .outp,.tracer .note{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px}
+.tracer .vars h5,.tracer .outp h5{margin:0 0 6px;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px;color:var(--muted)}
+.tracer .vars table{margin:0;font-family:Consolas,monospace;font-size:.9rem}
+.tracer .vars td{padding:4px 8px}
+.tracer .outp pre{margin:0;font-family:Consolas,monospace;white-space:pre-wrap;min-height:1.4em;color:#065f46}
+.tracer .note{background:var(--yellow-soft);border-color:#f5d87a;min-height:60px;font-size:.95rem}
+.tracer .ctrl{grid-column:1/-1;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tracer .ctrl .stepinfo{color:var(--muted);font-size:.9rem;margin-left:auto}
+.tracer .ln.changed td{}
+.vchg{background:#fde68a;border-radius:4px;padding:0 4px}
+/* quiz */
+.quiz{counter-reset:q}
+.q{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:12px 0}
+.q .qt{font-weight:600;margin-bottom:10px}
+.q .qt::before{counter-increment:q;content:counter(q) ". ";color:var(--accent)}
+.q .opt{display:block;padding:9px 12px;margin:6px 0;border:2px solid var(--line);border-radius:8px;cursor:pointer;transition:.15s;background:#fafbff}
+.q .opt:hover{border-color:var(--accent)}
+.q .opt.correct{border-color:var(--green);background:var(--green-soft)}
+.q .opt.wrong{border-color:var(--red);background:var(--red-soft)}
+.q .opt.disabled{cursor:default}
+.q .expl{display:none;margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--accent-soft);font-size:.95rem}
+.q .expl.show{display:block}
+.q .opt code,.q .qt code{background:#e8ebf3}
+.qsum{margin-top:10px;font-weight:600}
+.pre-inline{font-family:Consolas,monospace;background:#0f172a;color:#e2e8f0;padding:8px 12px;border-radius:8px;white-space:pre;display:block;margin:6px 0 10px;font-size:.9rem;overflow-x:auto}
+/* blanks */
+.blank{display:inline-block;width:110px;padding:4px 8px;border:2px solid var(--accent);border-radius:6px;font-family:Consolas,monospace;font-size:.95rem;background:#fff;color:#111}
+.blank.ok{border-color:var(--green);background:var(--green-soft)}
+.blank.bad{border-color:var(--red);background:var(--red-soft)}
+.blankcode{font-family:Consolas,monospace;background:#1e293b;color:#e2e8f0;padding:14px 18px;border-radius:10px;white-space:pre;line-height:2;overflow-x:auto}
+details{border:1px solid var(--line);border-radius:10px;padding:10px 16px;margin:10px 0;background:#fff}
+summary{cursor:pointer;font-weight:600;color:var(--accent)}
+details[open] summary{margin-bottom:8px}
+.ex{border-left:5px solid var(--purple);padding-left:16px;margin:16px 0}
+.ex .lvl{display:inline-block;font-size:.75rem;padding:2px 8px;border-radius:12px;background:var(--purple-soft);color:var(--purple);font-weight:700;vertical-align:middle;margin-left:6px}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:.8rem;font-weight:700}
+.badge.t{background:var(--green-soft);color:var(--green)}
+.badge.f{background:var(--red-soft);color:var(--red)}
+.flow{display:flex;flex-direction:column;align-items:center;gap:0;margin:14px 0}
+.flow .node{padding:10px 18px;border-radius:10px;border:2px solid var(--line);background:#fff;font-weight:600;text-align:center;min-width:200px}
+.flow .node.dec{border-color:var(--yellow);background:var(--yellow-soft);border-radius:30px}
+.flow .node.act{border-color:var(--accent);background:var(--accent-soft)}
+.flow .node.on{box-shadow:0 0 0 4px #86efac;border-color:var(--green)}
+.flow .arrow{height:28px;width:2px;background:#9aa3b8;position:relative}
+.flow .arrow::after{content:"";position:absolute;bottom:-1px;left:-5px;border:6px solid transparent;border-top:8px solid #9aa3b8}
+.flow .branches{display:flex;gap:24px;align-items:flex-start}
+.flow .branch{display:flex;flex-direction:column;align-items:center}
+.flow .lbl{font-size:.8rem;color:var(--muted);font-weight:700}
+.range-viz{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0;min-height:42px}
+.range-viz .cell{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-family:Consolas,monospace;border:2px solid var(--line);background:#fff;color:#aaa}
+.range-viz .cell.in{background:var(--accent);border-color:var(--accent);color:#fff}
+.range-viz .cell.stop{border-color:var(--red);color:var(--red);border-style:dashed}
+.grid{display:grid;gap:4px;margin:10px 0}
+.grid .c{height:34px;border-radius:6px;background:var(--line);display:flex;align-items:center;justify-content:center;font-family:Consolas,monospace;font-size:.8rem;color:var(--muted)}
+.grid .c.on{background:var(--accent);color:#fff;font-weight:700}
+.grid .c.done{background:#a5b4fc;color:#fff}
+.machine{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:12px 0}
+.machine .mbox{border:3px solid var(--purple);background:var(--purple-soft);padding:12px 18px;border-radius:12px;font-weight:700;font-family:Consolas,monospace;min-width:150px;text-align:center}
+.machine .marr{font-size:1.6rem;color:var(--purple)}
+.machine .mout{border:3px dashed var(--green);background:var(--green-soft);padding:12px 18px;border-radius:12px;font-family:Consolas,monospace;font-weight:700;min-width:100px;text-align:center}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:700px){.two{grid-template-columns:1fr}}
+.two .col h5{margin:0 0 6px}
+.cheat td code{white-space:pre}
+.score{font-size:1.4rem;font-weight:800;margin:10px 0}
+.mark{display:inline-block;width:22px;height:22px;border-radius:50%;background:var(--line);vertical-align:middle;margin-right:6px;font-size:.75rem;line-height:22px;text-align:center;color:#fff}
+.mark.done{background:var(--green)}
+.toc{columns:2;gap:24px}
+@media(max-width:600px){.toc{columns:1}}
+.toc a{text-decoration:none;color:var(--accent)}
+.checkrow{margin-top:10px}
+.pyout{background:#111827;color:#d1fae5;font-family:Consolas,monospace;padding:12px 16px;border-radius:10px;white-space:pre-wrap;min-height:60px;margin-top:10px;font-size:.92rem}
+.pyout.err{color:#fca5a5}
+
+.mini{margin-top:22px;border:2px dashed var(--purple);border-radius:12px;padding:14px 18px;background:#faf7ff}
+.mini h4{margin:0 0 2px;color:var(--purple)}
+.mini .msub{margin:0 0 10px;color:var(--muted);font-size:.9rem}
+.mtask{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:8px 0}
+.mtask .mt{font-weight:700;color:var(--purple);margin-bottom:4px}
+.mtask .mhint{font-size:.9rem;color:var(--muted);margin-top:6px}
+.mtask details{margin:8px 0 0;padding:6px 12px}
+.mtask pre.code{margin:6px 0 0;font-size:.88rem}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:30px}
+.kbd{border:1px solid #bbb;border-bottom-width:3px;border-radius:5px;padding:1px 6px;font-size:.85em;background:#f8f8f8;font-family:Consolas,monospace}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🐍 Python для початківців: умови, цикли, функції</h1>
+  <p>Інтерактивний посібник. Читай, тисни кнопки, крокуй по коду, проходь тести, виконуй вправи — і три ключові теми стануть твоїми назавжди.</p>
+</header>
+
+<nav><div class="inner">
+  <a href="#start">Початок</a>
+  <a href="#cond">1. Умови</a>
+  <a href="#loops">2. Цикли</a>
+  <a href="#funcs">3. Функції</a>
+  <a href="#combo">4. Все разом</a>
+  <a href="#final">Підсумковий тест</a>
+  <a href="#play">Пісочниця</a>
+  <a href="#cheat">Шпаргалка</a>
+  <div id="progressWrap"><span id="progressText">0%</span><div id="progressBar"><div id="progressFill"></div></div></div>
+</div></nav>
+
+<main>
+
+<!-- ============================================================ -->
+<section class="part" id="start">
+<h2>Як працювати з цим посібником</h2>
+<div class="card">
+<p>Посібник побудований так, що кожну тему ти проходиш у <b>чотири кроки</b>:</p>
+<table>
+<tr><th>Крок</th><th>Що робиш</th><th>Навіщо</th></tr>
+<tr><td>1. 📖 Читаєш</td><td>Пояснення простою мовою з прикладами</td><td>Щоб зрозуміти ідею</td></tr>
+<tr><td>2. 👣 Крокуєш по коду</td><td>Тиснеш «Крок →» у трасувальнику і бачиш, що робить Python рядок за рядком</td><td>Щоб бачити, як воно <i>насправді</i> виконується</td></tr>
+<tr><td>3. 🎛 Граєшся із симуляторами</td><td>Змінюєш числа — дивишся, як змінюється результат</td><td>Щоб перевірити своє розуміння</td></tr>
+<tr><td>4. ✅ Тест і вправи</td><td>Відповідаєш на запитання, пишеш код сам</td><td>Щоб закріпити назавжди</td></tr>
+</table>
+<div class="box idea"><b>Головне правило</b> Не читай пасивно. Кожен приклад спробуй <b>передбачити</b>: «що виведе цей код?» — і лише потім дивись відповідь. Саме момент «я думав X, а вийшло Y» і є навчанням.</div>
+<p>Угорі є смуга прогресу — вона заповнюється, коли ти проходиш тести. Прогрес зберігається у браузері.</p>
+<p>Наприкінці є <a href="#play">пісочниця</a>, де можна запускати справжній Python прямо тут, у браузері (потрібен інтернет для першого завантаження).</p>
+</div>
+
+<div class="card">
+<h4>Мінімум, який треба знати перед початком</h4>
+<p>Якщо ці три рядки тобі зрозумілі — можна починати:</p>
+<pre class="code">name = "Оля"        # змінна, у якій зберігається текст (рядок)
+age = 17            # змінна, у якій зберігається ціле число
+print(name, age)    # вивести значення на екран</pre>
+<div class="out">Оля 17</div>
+<ul>
+<li><b>Змінна</b> — це «коробка з ім'ям», у яку ми кладемо значення. <code>age = 17</code> означає «поклади 17 у коробку age».</li>
+<li><code>print(...)</code> — показує значення на екрані.</li>
+<li><code>input(...)</code> — запитує текст у користувача. <b>Завжди повертає рядок</b>, тому для чисел пишемо <code>int(input("..."))</code>.</li>
+<li>Текст після <code>#</code> — коментар, Python його ігнорує.</li>
+</ul>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="cond">
+<h2>1. Умови: <code>if</code>, <code>elif</code>, <code>else</code></h2>
+<p class="lead">Умови — це спосіб сказати програмі: «якщо щось правда — зроби це, інакше — зроби інше». Без умов програма завжди робить одне й те саме.</p>
+
+<div class="card">
+<h3 style="margin-top:0">1.1 Навіщо потрібні умови (життєвий приклад)</h3>
+<p>Уяви охоронця біля входу в кіно на фільм 16+. Його інструкція:</p>
+<div class="box"><b>Інструкція охоронця</b> <b>ЯКЩО</b> вік відвідувача ≥ 16 — пропусти. <b>ІНАКШЕ</b> — скажи «вибачте, не можна».</div>
+<p>Це і є умова. У Python вона записується майже такими самими словами:</p>
+<pre class="code">age = 15
+
+if age &gt;= 16:
+    print("Проходьте!")
+else:
+    print("Вибачте, не можна")</pre>
+<div class="out">Вибачте, не можна</div>
+<p>Розберемо кожен елемент:</p>
+<table>
+<tr><th>Елемент</th><th>Що означає</th></tr>
+<tr><td><code>if</code></td><td>Ключове слово «якщо». Пишеться маленькими літерами.</td></tr>
+<tr><td><code>age &gt;= 16</code></td><td><b>Умова</b> — вираз, який Python оцінює як <span class="badge t">True</span> (правда) або <span class="badge f">False</span> (неправда).</td></tr>
+<tr><td><code>:</code></td><td>Двокрапка в кінці — <b>обов'язкова</b>. Вона каже: «далі починається блок коду».</td></tr>
+<tr><td>4 пробіли відступу</td><td>Усі рядки з відступом належать до цього <code>if</code>. Відступ у Python — це не краса, а <b>граматика</b>.</td></tr>
+<tr><td><code>else:</code></td><td>«Інакше» — виконується, коли умова <code>if</code> була <code>False</code>. Умови після <code>else</code> немає.</td></tr>
+</table>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Створи змінну <code>temperature = 5</code>. Якщо температура менша за 10 — виведи «Одягни куртку», інакше — «Куртка не потрібна».</div><details><summary>Відповідь</summary><pre class="code">temperature = 5
+if temperature &lt; 10:
+    print("Одягни куртку")
+else:
+    print("Куртка не потрібна")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Зміни попередній код так, щоб він працював без <code>else</code>: якщо температура менша за 10 — виведи «Одягни куртку», а потім <b>завжди</b> виведи «Гарного дня!».</div><details><summary>Відповідь</summary><pre class="code">temperature = 5
+if temperature &lt; 10:
+    print("Одягни куртку")
+print("Гарного дня!")   # без відступу — виконується завжди</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Знайди помилку (їх дві):<br><code>if age &gt;= 16</code><br><code>print("Проходьте")</code></div><details><summary>Відповідь</summary><pre class="code">if age &gt;= 16:            # 1) не вистачало двокрапки
+    print("Проходьте")   # 2) не було відступу</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.2 Схема виконання (блок-схема)</h3>
+<p>Введи вік і дивись, яким шляхом піде програма:</p>
+<label>Вік: <input type="number" id="flowAge" value="15" min="0" max="120" style="width:90px"></label>
+<button class="btn small" onclick="runFlow()">Показати шлях</button>
+<div class="flow" id="flow1">
+  <div class="node act" data-n="s">age = <span id="flowAgeShow">15</span></div>
+  <div class="arrow"></div>
+  <div class="node dec" data-n="d">age &gt;= 16 ?</div>
+  <div class="branches">
+    <div class="branch"><div class="lbl">True ✅</div><div class="arrow"></div><div class="node act" data-n="t">print("Проходьте!")</div></div>
+    <div class="branch"><div class="lbl">False ❌</div><div class="arrow"></div><div class="node act" data-n="f">print("Вибачте, не можна")</div></div>
+  </div>
+  <div class="arrow"></div>
+  <div class="node" data-n="e">кінець програми</div>
+</div>
+<p id="flowMsg" class="box ok" style="display:none"></p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Не запускаючи код, запиши на папері, яким шляхом (True чи False) піде програма з блок-схеми для <code>age = 16</code>, <code>age = 3</code>, <code>age = 100</code>. Потім перевір у симуляторі вище.</div><div class="mhint">💡 16 — граничний випадок: знак ≥ включає саме 16.</div><details><summary>Відповідь</summary><pre class="code"># age = 16  → 16 &gt;= 16 → True  → "Проходьте!"
+# age = 3   → 3 &gt;= 16  → False → "Вибачте, не можна"
+# age = 100 → True → "Проходьте!"</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Намалюй (на папері) блок-схему для задачі: якщо число <code>n</code> парне — вивести «парне», інакше «непарне». Потім запиши її кодом.</div><details><summary>Відповідь</summary><pre class="code">n = 8
+if n % 2 == 0:
+    print("парне")
+else:
+    print("непарне")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.3 Оператори порівняння — з чого складаються умови</h3>
+<p>Умова — це питання, на яке відповідь «так» або «ні». Ось усі способи поставити таке питання:</p>
+<table>
+<tr><th>Оператор</th><th>Читається як</th><th>Приклад</th><th>Результат</th></tr>
+<tr><td><code>==</code></td><td>дорівнює</td><td><code>5 == 5</code></td><td><span class="badge t">True</span></td></tr>
+<tr><td><code>!=</code></td><td>не дорівнює</td><td><code>5 != 5</code></td><td><span class="badge f">False</span></td></tr>
+<tr><td><code>&gt;</code></td><td>більше</td><td><code>7 &gt; 3</code></td><td><span class="badge t">True</span></td></tr>
+<tr><td><code>&lt;</code></td><td>менше</td><td><code>7 &lt; 3</code></td><td><span class="badge f">False</span></td></tr>
+<tr><td><code>&gt;=</code></td><td>більше або дорівнює</td><td><code>3 &gt;= 3</code></td><td><span class="badge t">True</span></td></tr>
+<tr><td><code>&lt;=</code></td><td>менше або дорівнює</td><td><code>4 &lt;= 3</code></td><td><span class="badge f">False</span></td></tr>
+</table>
+<div class="box err"><b>Найчастіша помилка №1: <code>=</code> замість <code>==</code></b>
+<code>x = 5</code> — це <b>присвоєння</b> («поклади 5 у x»).<br>
+<code>x == 5</code> — це <b>порівняння</b> («чи x дорівнює 5?»).<br>
+Запис <code>if x = 5:</code> — це синтаксична помилка, Python відмовиться запускати програму.</div>
+<p>Результат порівняння можна навіть зберегти у змінну — це звичайне значення типу <code>bool</code>:</p>
+<pre class="code">temperature = 25
+is_hot = temperature &gt; 30
+print(is_hot)          # False
+print(type(is_hot))    # &lt;class 'bool'&gt;</pre>
+<div class="out">False
+&lt;class 'bool'&gt;</div>
+<p>Порівнювати можна й рядки (враховується регістр!):</p>
+<pre class="code">answer = "так"
+print(answer == "так")   # True
+print(answer == "Так")   # False — велика літера Т ≠ мала т</pre>
+<div class="out">True
+False</div>
+
+<h4>🎛 Перевір себе: калькулятор порівнянь</h4>
+<div>
+<input type="number" id="cmpA" value="7" style="width:80px">
+<select id="cmpOp"><option>==</option><option>!=</option><option>&gt;</option><option>&lt;</option><option>&gt;=</option><option>&lt;=</option></select>
+<input type="number" id="cmpB" value="3" style="width:80px">
+<button class="btn small" onclick="runCmp()">= ?</button>
+<span id="cmpRes" style="font-weight:700;font-size:1.1rem;margin-left:10px"></span>
+</div>
+<p style="color:var(--muted);font-size:.9rem">Спочатку вгадай відповідь у голові, потім тисни кнопку.</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Для кожного виразу запиши <b>True</b> або <b>False</b>, потім перевір у калькуляторі порівнянь:<br><code>10 &gt; 9</code>, <code>3 == 3.0</code>, <code>5 != 5</code>, <code>7 &lt;= 7</code>, <code>"abc" == "ABC"</code></div><details><summary>Відповідь</summary><pre class="code"># 10 &gt; 9      → True
+# 3 == 3.0     → True  (число 3 і 3.0 рівні)
+# 5 != 5       → False
+# 7 &lt;= 7       → True
+# "abc" == "ABC" → False (регістр важливий)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Збережи результат порівняння у змінну і виведи її: чи є число <code>x = 42</code> більшим за 40?</div><details><summary>Відповідь</summary><pre class="code">x = 42
+is_big = x &gt; 40
+print(is_big)      # True</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Запитай у користувача пароль. Якщо він дорівнює <code>"qwerty"</code> — виведи «Вхід дозволено», інакше «Неправильний пароль».</div><details><summary>Відповідь</summary><pre class="code">password = input("Пароль: ")
+if password == "qwerty":
+    print("Вхід дозволено")
+else:
+    print("Неправильний пароль")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.4 <code>elif</code> — коли варіантів більше двох</h3>
+<p>Часто потрібно перевірити не одне, а кілька питань по черзі. Наприклад, оцінка за балами:</p>
+<pre class="code">score = 78
+
+if score &gt;= 90:
+    print("Відмінно")
+elif score &gt;= 75:
+    print("Добре")
+elif score &gt;= 60:
+    print("Задовільно")
+else:
+    print("Незадовільно")</pre>
+<div class="out">Добре</div>
+<p><code>elif</code> = «else if» = «інакше, якщо». Як це працює — <b>дуже важливо</b>:</p>
+<ol>
+<li>Python перевіряє умови <b>зверху вниз, по черзі</b>.</li>
+<li>Як тільки знайшлася перша <code>True</code> — виконується її блок, а <b>решта пропускається повністю</b>.</li>
+<li>Якщо жодна не спрацювала — виконується <code>else</code> (якщо він є).</li>
+</ol>
+<div class="box warn"><b>Чому 78 дало «Добре», а не «Задовільно»?</b> Бо 78 ≥ 75 — це <code>True</code>, і Python зупинився на цій гілці. Він навіть не перевіряв <code>score &gt;= 60</code>, хоча вона теж правдива. Тому <b>порядок умов має значення</b>.</div>
+<p>Розгорни, щоб побачити, що буде, якщо переплутати порядок:</p>
+<details><summary>Неправильний порядок умов</summary>
+<pre class="code">score = 95
+if score &gt;= 60:
+    print("Задовільно")    # 95 &gt;= 60 → True → виконується ЦЕ
+elif score &gt;= 75:
+    print("Добре")         # не перевіряється
+elif score &gt;= 90:
+    print("Відмінно")      # не перевіряється</pre>
+<div class="out">Задовільно</div>
+<p>Студент із 95 балами отримав «Задовільно». Умови з <code>&gt;=</code> треба писати від більшого до меншого.</p>
+</details>
+
+<h4>👣 Покрокове виконання</h4>
+<p>Тисни «Крок →» і стеж, який рядок виконується і що перевіряє Python.</p>
+<div id="tr_if"></div>
+
+<h4>🎛 Симулятор оцінок</h4>
+<p>Введи бали і натисни кнопку — побачиш, які умови перевірялись і де програма зупинилась:</p>
+<label>Бали: <input type="number" id="gradeIn" value="78" min="0" max="100" style="width:90px"></label>
+<button class="btn small" onclick="runGrade()">Перевірити</button>
+<div id="gradeOut"></div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>За числом дня тижня (1–7) виведи його назву для 1, 6 і 7 («Понеділок», «Субота», «Неділя»), для решти — «Будній день».</div><details><summary>Відповідь</summary><pre class="code">day = 6
+if day == 1:
+    print("Понеділок")
+elif day == 6:
+    print("Субота")
+elif day == 7:
+    print("Неділя")
+else:
+    print("Будній день")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Температура води: ≤ 0 — «лід», від 1 до 99 — «вода», ≥ 100 — «пара». Напиши ланцюжок <code>if / elif / else</code>.</div><div class="mhint">💡 Друга умова не потребує <code>t &gt; 0</code> — якщо ми дійшли до elif, перша вже була False.</div><details><summary>Відповідь</summary><pre class="code">t = 25
+if t &lt;= 0:
+    print("лід")
+elif t &lt; 100:
+    print("вода")
+else:
+    print("пара")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Що виведе цей код? Відповідай без запуску.<br><code>x = 50</code><br><code>if x &gt; 10: print("A")</code><br><code>elif x &gt; 20: print("B")</code><br><code>elif x &gt; 40: print("C")</code></div><details><summary>Відповідь</summary><pre class="code"># Виведе тільки "A".
+# 50 &gt; 10 → True → виконали перший блок і ВИЙШЛИ.
+# Інші гілки не перевірялися, хоча теж правдиві.</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.5 Логічні оператори: <code>and</code>, <code>or</code>, <code>not</code></h3>
+<p>Іноді умова складається з кількох частин. «Пропустити, якщо вік ≥ 16 <b>і</b> є квиток».</p>
+<table>
+<tr><th>Оператор</th><th>Коли дає True</th><th>Приклад</th></tr>
+<tr><td><code>and</code> (і)</td><td>Коли <b>обидві</b> частини True</td><td><code>age &gt;= 16 and has_ticket</code></td></tr>
+<tr><td><code>or</code> (або)</td><td>Коли <b>хоча б одна</b> частина True</td><td><code>day == "сб" or day == "нд"</code></td></tr>
+<tr><td><code>not</code> (не)</td><td>Перевертає: True→False, False→True</td><td><code>not is_raining</code></td></tr>
+</table>
+<pre class="code">age = 17
+has_ticket = True
+
+if age &gt;= 16 and has_ticket:
+    print("Проходьте")
+else:
+    print("Не можна")</pre>
+<div class="out">Проходьте</div>
+
+<h4>Таблиці істинності (запам'ятай їх)</h4>
+<div class="two">
+<div class="col"><h5><code>and</code></h5>
+<table><tr><th>A</th><th>B</th><th>A and B</th></tr>
+<tr><td>True</td><td>True</td><td><span class="badge t">True</span></td></tr>
+<tr><td>True</td><td>False</td><td><span class="badge f">False</span></td></tr>
+<tr><td>False</td><td>True</td><td><span class="badge f">False</span></td></tr>
+<tr><td>False</td><td>False</td><td><span class="badge f">False</span></td></tr></table></div>
+<div class="col"><h5><code>or</code></h5>
+<table><tr><th>A</th><th>B</th><th>A or B</th></tr>
+<tr><td>True</td><td>True</td><td><span class="badge t">True</span></td></tr>
+<tr><td>True</td><td>False</td><td><span class="badge t">True</span></td></tr>
+<tr><td>False</td><td>True</td><td><span class="badge t">True</span></td></tr>
+<tr><td>False</td><td>False</td><td><span class="badge f">False</span></td></tr></table></div>
+</div>
+<div class="box idea"><b>Як запам'ятати</b> <code>and</code> — суворий: йому треба все. <code>or</code> — добрий: йому досить одного.</div>
+
+<h4>🎛 Інтерактивна таблиця</h4>
+<p>Перемикай значення і дивись результат:</p>
+<div>
+<label><input type="checkbox" id="lgA" checked> A = True</label> &nbsp;
+<label><input type="checkbox" id="lgB"> B = True</label>
+</div>
+<table id="lgTable"><tr><th>Вираз</th><th>Результат</th></tr>
+<tr><td><code>A and B</code></td><td id="lgAnd"></td></tr>
+<tr><td><code>A or B</code></td><td id="lgOr"></td></tr>
+<tr><td><code>not A</code></td><td id="lgNotA"></td></tr>
+<tr><td><code>not (A and B)</code></td><td id="lgNotAnd"></td></tr>
+</table>
+
+<div class="box err"><b>Помилка №2: «людська» умова</b>
+Так <b>не працює</b>: <code>if x == 1 or 2 or 3:</code> — це завжди True, бо число 2 саме по собі «правдиве».<br>
+Правильно: <code>if x == 1 or x == 2 or x == 3:</code> або коротше: <code>if x in (1, 2, 3):</code></div>
+
+<h4>Перевірка діапазону</h4>
+<pre class="code">temp = 22
+if temp &gt;= 18 and temp &lt;= 25:
+    print("Комфортно")
+
+# У Python є ще коротший запис — як у математиці:
+if 18 &lt;= temp &lt;= 25:
+    print("Комфортно (короткий запис)")</pre>
+<div class="out">Комфортно
+Комфортно (короткий запис)</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Запиши результат кожного виразу (True/False), потім перевір в інтерактивній таблиці:<br><code>True and True</code>, <code>True and False</code>, <code>False or True</code>, <code>not True</code>, <code>not (False or False)</code></div><details><summary>Відповідь</summary><pre class="code"># True and True        → True
+# True and False       → False
+# False or True        → True
+# not True             → False
+# not (False or False) → not False → True</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Є змінні <code>is_weekend = True</code> та <code>is_raining = False</code>. Виведи «Йдемо в парк», якщо вихідний <b>і</b> не йде дощ.</div><details><summary>Відповідь</summary><pre class="code">is_weekend = True
+is_raining = False
+if is_weekend and not is_raining:
+    print("Йдемо в парк")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Число <code>n</code> «хороше», якщо воно від 10 до 20 включно <b>або</b> дорівнює 0. Напиши умову.</div><details><summary>Відповідь</summary><pre class="code">n = 15
+if (10 &lt;= n &lt;= 20) or n == 0:
+    print("хороше")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Виправ помилку: <code>if color == "red" or "blue":</code></div><details><summary>Відповідь</summary><pre class="code">if color == "red" or color == "blue":
+# або коротше:
+if color in ("red", "blue"):</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.6 Вкладені умови</h3>
+<p>Усередині блоку <code>if</code> може бути ще один <code>if</code>. Кожен рівень — додаткові 4 пробіли.</p>
+<pre class="code">age = 20
+has_ticket = False
+
+if age &gt;= 16:
+    print("Вік підходить")
+    if has_ticket:
+        print("Квиток є — проходьте")
+    else:
+        print("Купіть квиток")
+else:
+    print("Замалий вік")</pre>
+<div class="out">Вік підходить
+Купіть квиток</div>
+<p>Зверни увагу на відступи: внутрішній <code>if has_ticket:</code> має 4 пробіли, а його <code>print</code> — 8. Відступ показує, <b>хто до кого належить</b>.</p>
+<div class="box warn"><b>Порада</b> Глибше ніж 2–3 рівні вкладати не варто — код стає важко читати. Часто вкладений if можна замінити на <code>and</code>.</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Логін: якщо <code>login == "admin"</code>, то перевір ще й пароль: якщо <code>password == "1234"</code> — «Вітаю, адмін», інакше — «Неправильний пароль». Якщо логін не admin — «Невідомий користувач».</div><details><summary>Відповідь</summary><pre class="code">login = "admin"
+password = "0000"
+if login == "admin":
+    if password == "1234":
+        print("Вітаю, адмін")
+    else:
+        print("Неправильний пароль")
+else:
+    print("Невідомий користувач")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Перепиши вкладений if з одним <code>and</code> (без вкладення):<br><code>if a &gt; 0:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;if b &gt; 0:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("обидва додатні")</code></div><details><summary>Відповідь</summary><pre class="code">if a &gt; 0 and b &gt; 0:
+    print("обидва додатні")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.7 Що Python вважає «правдою» (truthy / falsy)</h3>
+<p>В умові можна писати не лише порівняння, а будь-яке значення. Python сам вирішить, «правда» це чи ні:</p>
+<table>
+<tr><th>Значення</th><th>В умові це…</th></tr>
+<tr><td><code>0</code>, <code>0.0</code></td><td><span class="badge f">False</span></td></tr>
+<tr><td>Будь-яке інше число (<code>5</code>, <code>-1</code>, <code>0.1</code>)</td><td><span class="badge t">True</span></td></tr>
+<tr><td>Порожній рядок <code>""</code></td><td><span class="badge f">False</span></td></tr>
+<tr><td>Непорожній рядок <code>"привіт"</code>, навіть <code>"0"</code></td><td><span class="badge t">True</span></td></tr>
+<tr><td>Порожній список <code>[]</code></td><td><span class="badge f">False</span></td></tr>
+<tr><td>Непорожній список <code>[1, 2]</code></td><td><span class="badge t">True</span></td></tr>
+<tr><td><code>None</code></td><td><span class="badge f">False</span></td></tr>
+</table>
+<pre class="code">name = input("Як тебе звати? ")   # уявімо, користувач просто натиснув Enter
+
+if name:
+    print("Привіт,", name)
+else:
+    print("Ти нічого не ввів!")</pre>
+<div class="out">Ти нічого не ввів!</div>
+<p>Це зручно: <code>if name:</code> читається як «якщо ім'я не порожнє».</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Для кожного значення скажи, чи виконається <code>if value:</code> → True чи False: <code>0</code>, <code>-7</code>, <code>""</code>, <code>"0"</code>, <code>[]</code>, <code>[0]</code>, <code>None</code></div><details><summary>Відповідь</summary><pre class="code"># 0     → False
+# -7    → True  (будь-яке ненульове число)
+# ""    → False (порожній рядок)
+# "0"   → True  (рядок не порожній!)
+# []    → False
+# [0]   → True  (список має один елемент)
+# None  → False</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Є список покупок <code>items = []</code>. Виведи «Кошик порожній», якщо в ньому нічого немає, інакше — «У кошику щось є». Використай коротку форму (без <code>len</code>).</div><details><summary>Відповідь</summary><pre class="code">items = []
+if items:
+    print("У кошику щось є")
+else:
+    print("Кошик порожній")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.8 Умова в один рядок (тернарний оператор)</h3>
+<p>Коли треба обрати одне з двох значень, є короткий запис:</p>
+<pre class="code">age = 20
+status = "дорослий" if age &gt;= 18 else "дитина"
+print(status)</pre>
+<div class="out">дорослий</div>
+<p>Читається зліва направо як речення: «status = "дорослий", якщо age ≥ 18, інакше "дитина"». Це те саме, що:</p>
+<pre class="code">if age &gt;= 18:
+    status = "дорослий"
+else:
+    status = "дитина"</pre>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Запиши в один рядок: <code>sign = "додатне"</code>, якщо <code>n &gt; 0</code>, інакше <code>"недодатне"</code>.</div><details><summary>Відповідь</summary><pre class="code">n = -3
+sign = "додатне" if n &gt; 0 else "недодатне"
+print(sign)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Перепиши тернарним оператором:<br><code>if score &gt;= 60:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;result = "склав"</code><br><code>else:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;result = "не склав"</code></div><details><summary>Відповідь</summary><pre class="code">result = "склав" if score &gt;= 60 else "не склав"</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Виведи слово «парне» або «непарне» для <code>n = 9</code> одним <code>print</code>.</div><details><summary>Відповідь</summary><pre class="code">n = 9
+print("парне" if n % 2 == 0 else "непарне")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">1.9 Типові помилки з умовами (і як їх виправити)</h3>
+<table>
+<tr><th>❌ Так не можна</th><th>✅ Правильно</th><th>Чому</th></tr>
+<tr><td><code>if x = 5:</code></td><td><code>if x == 5:</code></td><td>Порівняння — два знаки «=»</td></tr>
+<tr><td><code>if x &gt; 5</code><br>(без двокрапки)</td><td><code>if x &gt; 5:</code></td><td>Двокрапка обов'язкова</td></tr>
+<tr><td><code>if x &gt; 5:</code><br><code>print("ok")</code><br>(без відступу)</td><td><code>if x &gt; 5:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("ok")</code></td><td>Блок має бути з відступом</td></tr>
+<tr><td><code>if x == "5":</code> коли x — число 5</td><td><code>if x == 5:</code></td><td>Рядок "5" ≠ число 5</td></tr>
+<tr><td><code>age = input("Вік: ")</code><br><code>if age &gt;= 18:</code></td><td><code>age = int(input("Вік: "))</code></td><td><code>input</code> дає рядок, його не можна порівняти з числом</td></tr>
+<tr><td><code>else if x &gt; 3:</code></td><td><code>elif x &gt; 3:</code></td><td>У Python це одне слово</td></tr>
+<tr><td><code>else x &gt; 3:</code></td><td><code>else:</code></td><td>У <code>else</code> умови не буває</td></tr>
+</table>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>У кожному рядку є рівно одна помилка. Знайди і виправ:<br>а) <code>if x = 3:</code><br>б) <code>if x &gt; 3</code><br>в) <code>else if x &lt; 0:</code><br>г) <code>else x == 0:</code></div><details><summary>Відповідь</summary><pre class="code"># а) if x == 3:      — два знаки =
+# б) if x &gt; 3:       — двокрапка
+# в) elif x &lt; 0:     — одне слово elif
+# г) else:            — у else умови не буває</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Користувач вводить вік. Чому цей код падає з помилкою і як виправити?<br><code>age = input("Вік: ")</code><br><code>if age &gt; 18: print("ok")</code></div><details><summary>Відповідь</summary><pre class="code">age = int(input("Вік: "))   # input дає рядок, перетворюємо на число
+if age &gt; 18:
+    print("ok")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✏️ Заповни пропуски</h3>
+<p>Впиши потрібні слова або знаки, потім натисни «Перевірити».</p>
+<div class="blankcode" id="blanks1">number = 7
+<input class="blank" data-a="if" placeholder="?"> number % 2 <input class="blank" data-a="==" placeholder="?"> 0<input class="blank" data-a=":" placeholder="?" style="width:50px">
+    print("Парне")
+<input class="blank" data-a="else" placeholder="?">:
+    print("Непарне")</div>
+<div class="checkrow"><button class="btn small" onclick="checkBlanks('blanks1')">Перевірити</button> <span id="blanks1_res"></span></div>
+<details><summary>Підказка</summary><code>%</code> — остача від ділення. <code>7 % 2</code> дорівнює 1, тому 7 — непарне. Парне число має остачу 0.</details>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✅ Тест: умови</h3>
+<p>Обери відповідь — одразу побачиш пояснення.</p>
+<div class="quiz" id="quiz_cond"></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">🛠 Вправи: умови</h3>
+<p>Пиши код у своєму редакторі або в <a href="#play">пісочниці</a>. Розв'язок дивись лише після спроби.</p>
+
+<div class="ex"><h4>Вправа 1. Парне чи непарне <span class="lvl">легко</span></h4>
+<p>Запитай у користувача число і виведи «Парне» або «Непарне».</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">n = int(input("Введи число: "))
+if n % 2 == 0:
+    print("Парне")
+else:
+    print("Непарне")</pre></details></div>
+
+<div class="ex"><h4>Вправа 2. Найбільше з трьох <span class="lvl">легко</span></h4>
+<p>Є три змінні <code>a</code>, <code>b</code>, <code>c</code>. Виведи найбільше число (без використання <code>max()</code>).</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">a, b, c = 4, 9, 2
+if a &gt;= b and a &gt;= c:
+    print(a)
+elif b &gt;= a and b &gt;= c:
+    print(b)
+else:
+    print(c)</pre></details></div>
+
+<div class="ex"><h4>Вправа 3. Калькулятор <span class="lvl">середньо</span></h4>
+<p>Запитай два числа та операцію (<code>+</code>, <code>-</code>, <code>*</code>, <code>/</code>). Виведи результат. Якщо ділення на нуль — виведи «Ділити на нуль не можна». Якщо операція невідома — «Невідома операція».</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">a = float(input("Перше число: "))
+b = float(input("Друге число: "))
+op = input("Операція (+ - * /): ")
+
+if op == "+":
+    print(a + b)
+elif op == "-":
+    print(a - b)
+elif op == "*":
+    print(a * b)
+elif op == "/":
+    if b == 0:
+        print("Ділити на нуль не можна")
+    else:
+        print(a / b)
+else:
+    print("Невідома операція")</pre></details></div>
+
+<div class="ex"><h4>Вправа 4. Високосний рік <span class="lvl">середньо</span></h4>
+<p>Рік високосний, якщо він ділиться на 4, але не ділиться на 100 — або ділиться на 400. Запитай рік і виведи відповідь.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">year = int(input("Рік: "))
+if (year % 4 == 0 and year % 100 != 0) or year % 400 == 0:
+    print("Високосний")
+else:
+    print("Не високосний")</pre>
+<p>Перевір: 2024 — високосний, 1900 — ні, 2000 — так.</p></details></div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="loops">
+<h2>2. Цикли: <code>for</code> і <code>while</code></h2>
+<p class="lead">Цикл — це спосіб сказати програмі «повтори це кілька разів». Замість того, щоб копіювати рядок 100 разів, ми пишемо його один раз у циклі.</p>
+
+<div class="card">
+<h3 style="margin-top:0">2.1 Навіщо потрібні цикли</h3>
+<p>Треба вивести «Привіт!» 5 разів. Без циклу:</p>
+<pre class="code">print("Привіт!")
+print("Привіт!")
+print("Привіт!")
+print("Привіт!")
+print("Привіт!")</pre>
+<p>А якщо 1000 разів? Із циклом це завжди 2 рядки:</p>
+<pre class="code">for i in range(5):
+    print("Привіт!")</pre>
+<div class="out">Привіт!
+Привіт!
+Привіт!
+Привіт!
+Привіт!</div>
+<p>У Python два види циклів:</p>
+<table>
+<tr><th>Цикл</th><th>Коли використовувати</th><th>Приклад із життя</th></tr>
+<tr><td><code>for</code></td><td>Коли відомо, <b>скільки</b> разів або <b>по чому</b> пройти (список, рядок, діапазон чисел)</td><td>«Для кожного учня в класі — перевір домашку»</td></tr>
+<tr><td><code>while</code></td><td>Коли повторюємо, <b>поки виконується умова</b>, і наперед невідомо, скільки разів</td><td>«Поки не вгадаєш число — пробуй ще»</td></tr>
+</table>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Виведи своє ім'я 3 рази за допомогою циклу.</div><details><summary>Відповідь</summary><pre class="code">for i in range(3):
+    print("Оля")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Для кожної задачі скажи, який цикл підходить — <code>for</code> чи <code>while</code>:<br>а) вивести числа від 1 до 100;<br>б) просити ввести число, поки не введуть додатне;<br>в) привітати кожного учня зі списку;<br>г) зменшувати баланс, поки він більший за 0.</div><details><summary>Відповідь</summary><pre class="code"># а) for   — відома кількість повторів
+# б) while — невідомо, скільки спроб
+# в) for   — проходимо по списку
+# г) while — повторюємо, поки умова правдива</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.2 Цикл <code>for</code> і <code>range()</code></h3>
+<pre class="code">for i in range(5):
+    print("Ітерація номер", i)</pre>
+<div class="out">Ітерація номер 0
+Ітерація номер 1
+Ітерація номер 2
+Ітерація номер 3
+Ітерація номер 4</div>
+<p>Розбираємо:</p>
+<ul>
+<li><code>for</code> — «для».</li>
+<li><code>i</code> — <b>змінна циклу</b>. На кожному повторі вона отримує нове значення. Ім'я може бути будь-яке (<code>i</code>, <code>number</code>, <code>step</code>).</li>
+<li><code>in range(5)</code> — «у діапазоні від 0 до 5 (не включно)». Тобто 0, 1, 2, 3, 4 — рівно 5 чисел.</li>
+<li><code>:</code> і відступ — як в <code>if</code>. Усе з відступом повторюється.</li>
+</ul>
+<div class="box warn"><b>Запам'ятай назавжди:</b> <code>range(5)</code> починається з <b>0</b> і <b>не включає</b> 5. Чисел рівно 5: 0, 1, 2, 3, 4. Один «повтор» циклу називається <b>ітерація</b>.</div>
+
+<h4>Три форми <code>range()</code></h4>
+<table>
+<tr><th>Запис</th><th>Що означає</th><th>Числа</th></tr>
+<tr><td><code>range(5)</code></td><td>від 0 до 5 (не включно)</td><td>0, 1, 2, 3, 4</td></tr>
+<tr><td><code>range(2, 6)</code></td><td>від 2 до 6 (не включно)</td><td>2, 3, 4, 5</td></tr>
+<tr><td><code>range(1, 10, 3)</code></td><td>від 1 до 10 з кроком 3</td><td>1, 4, 7</td></tr>
+<tr><td><code>range(10, 0, -2)</code></td><td>від 10 вниз до 0 з кроком −2</td><td>10, 8, 6, 4, 2</td></tr>
+</table>
+
+<h4>🎛 Візуалізатор range()</h4>
+<p>Змінюй параметри і дивись, які числа потрапляють у цикл:</p>
+<div>
+range( <input type="number" id="rStart" value="0" style="width:70px"> , <input type="number" id="rStop" value="5" style="width:70px"> , <input type="number" id="rStep" value="1" style="width:70px"> )
+<button class="btn small" onclick="rangeViz()">Показати</button>
+</div>
+<div class="range-viz" id="rangeOut"></div>
+<p id="rangeTxt" style="font-family:Consolas,monospace"></p>
+<p style="color:var(--muted);font-size:.9rem">Сині — потрапляють у цикл. Червоне пунктирне — межа <code>stop</code>, яка НЕ входить.</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Не запускаючи, запиши, які числа виведе кожен цикл. Потім перевір у візуалізаторі range().<br><code>for i in range(4)</code><br><code>for i in range(3, 7)</code><br><code>for i in range(0, 20, 5)</code><br><code>for i in range(5, 0, -1)</code></div><details><summary>Відповідь</summary><pre class="code"># range(4)         → 0 1 2 3
+# range(3, 7)      → 3 4 5 6
+# range(0, 20, 5)  → 0 5 10 15
+# range(5, 0, -1)  → 5 4 3 2 1</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Виведи числа від 1 до 10 (включно) — кожне на новому рядку.</div><div class="mhint">💡 Межа range не входить, тому 11.</div><details><summary>Відповідь</summary><pre class="code">for i in range(1, 11):
+    print(i)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Виведи всі числа, кратні 10, від 10 до 100 включно, в один рядок через пробіл.</div><details><summary>Відповідь</summary><pre class="code">for i in range(10, 101, 10):
+    print(i, end=" ")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Запитай у користувача число <code>n</code> і виведи «Привіт!» рівно n разів.</div><details><summary>Відповідь</summary><pre class="code">n = int(input("Скільки разів? "))
+for i in range(n):
+    print("Привіт!")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.3 Покроково: як виконується цикл <code>for</code></h3>
+<p>Класична задача — порахувати суму чисел. Зверни увагу на змінну-<b>накопичувач</b> <code>total</code>: спочатку 0, потім до неї по черзі додаються числа.</p>
+<div id="tr_for"></div>
+<div class="box idea"><b>Шаблон «накопичувач»</b> — один із найважливіших у програмуванні:
+<ol style="margin:6px 0 0">
+<li>До циклу: створити змінну з початковим значенням (<code>total = 0</code>).</li>
+<li>У циклі: оновлювати її (<code>total = total + n</code>, або коротше <code>total += n</code>).</li>
+<li>Після циклу: використати результат.</li>
+</ol></div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Порахуй суму чисел від 1 до 5 за шаблоном «накопичувач». Перед запуском запиши у стовпчик, яким буде <code>total</code> після кожної ітерації.</div><details><summary>Відповідь</summary><pre class="code">total = 0
+for n in range(1, 6):
+    total += n
+    # total після ітерацій: 1, 3, 6, 10, 15
+print(total)   # 15</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Порахуй добуток чисел зі списку <code>[2, 3, 4]</code>. Яким має бути початкове значення накопичувача?</div><details><summary>Відповідь</summary><pre class="code">product = 1          # для множення починаємо з 1, не з 0!
+for n in [2, 3, 4]:
+    product *= n
+print(product)       # 24</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Знайди помилку:<br><code>for n in [1, 2, 3]:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;total = 0</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;total += n</code><br><code>print(total)</code></div><details><summary>Відповідь</summary><pre class="code"># total = 0 стоїть усередині циклу — обнуляється на кожній ітерації.
+# Виведе 3 замість 6. Правильно:
+total = 0
+for n in [1, 2, 3]:
+    total += n
+print(total)   # 6</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.4 <code>for</code> по списку і по рядку</h3>
+<p><code>for</code> уміє проходити не лише по числах, а по будь-якій <b>послідовності</b>:</p>
+<pre class="code">fruits = ["яблуко", "банан", "вишня"]
+for fruit in fruits:
+    print("Я люблю", fruit)</pre>
+<div class="out">Я люблю яблуко
+Я люблю банан
+Я люблю вишня</div>
+<pre class="code">word = "кіт"
+for letter in word:
+    print(letter)</pre>
+<div class="out">к
+і
+т</div>
+<p>Тобто <code>for x in щось:</code> читається як «для кожного x із щось». Змінна циклу по черзі стає кожним елементом.</p>
+
+<h4>Коли потрібен і номер, і елемент — <code>enumerate()</code></h4>
+<pre class="code">fruits = ["яблуко", "банан", "вишня"]
+for index, fruit in enumerate(fruits, start=1):
+    print(index, fruit)</pre>
+<div class="out">1 яблуко
+2 банан
+3 вишня</div>
+<div class="box err"><b>Помилка-початківця</b> Писати <code>for i in range(len(fruits)): print(fruits[i])</code> можна, але це незручно. Якщо тобі потрібні самі елементи — пиши <code>for fruit in fruits:</code>.</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Є список <code>colors = ["червоний", "зелений", "синій"]</code>. Виведи кожен колір з префіксом «Колір: ».</div><details><summary>Відповідь</summary><pre class="code">colors = ["червоний", "зелений", "синій"]
+for color in colors:
+    print("Колір:", color)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Виведи кожну літеру слова <code>"python"</code> великою (метод <code>.upper()</code>).</div><details><summary>Відповідь</summary><pre class="code">for letter in "python":
+    print(letter.upper())</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Виведи список <code>["кава", "чай", "сік"]</code> як пронумероване меню: <code>1. кава</code>, <code>2. чай</code>…</div><details><summary>Відповідь</summary><pre class="code">drinks = ["кава", "чай", "сік"]
+for i, drink in enumerate(drinks, start=1):
+    print(f"{i}. {drink}")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Порахуй, скільки літер «а» у слові <code>"банан"</code>.</div><details><summary>Відповідь</summary><pre class="code">count = 0
+for ch in "банан":
+    if ch == "а":
+        count += 1
+print(count)   # 2</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.5 Цикл <code>while</code> — «поки правда»</h3>
+<pre class="code">count = 3
+while count &gt; 0:
+    print(count)
+    count = count - 1
+print("Старт!")</pre>
+<div class="out">3
+2
+1
+Старт!</div>
+<p>Алгоритм роботи <code>while</code>:</p>
+<ol>
+<li>Перевірити умову (<code>count &gt; 0</code>).</li>
+<li>Якщо <code>True</code> — виконати тіло, повернутись до кроку 1.</li>
+<li>Якщо <code>False</code> — вийти з циклу і йти далі.</li>
+</ol>
+<div class="box err"><b>Найнебезпечніша помилка: нескінченний цикл</b>
+Якщо забути рядок <code>count = count - 1</code>, умова <code>count &gt; 0</code> ніколи не стане <code>False</code>, і програма «зависне», друкуючи 3 без кінця. Зупинити її можна комбінацією <span class="kbd">Ctrl</span>+<span class="kbd">C</span>.<br>
+<b>Правило:</b> у тілі <code>while</code> має бути щось, що наближає умову до <code>False</code>.</div>
+
+<h4>👣 Покроково</h4>
+<div id="tr_while"></div>
+
+<h4>Типовий випадок для <code>while</code>: повторювати, поки користувач не введе правильно</h4>
+<pre class="code">password = ""
+while password != "1234":
+    password = input("Пароль: ")
+print("Доступ дозволено")</pre>
+<p>Тут ми не знаємо, скільки спроб зробить людина — тому <code>for</code> не підходить, а <code>while</code> — ідеально.</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Виведи числа від 1 до 5 за допомогою <code>while</code>.</div><details><summary>Відповідь</summary><pre class="code">i = 1
+while i &lt;= 5:
+    print(i)
+    i += 1</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Знайди помилку — чому цей цикл ніколи не закінчиться?<br><code>n = 10</code><br><code>while n &gt; 0:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print(n)</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;n + 1</code></div><details><summary>Відповідь</summary><pre class="code"># Рядок "n + 1" нічого не змінює — результат нікуди не зберігається.
+# Та й напрям не той: треба зменшувати.
+n = 10
+while n &gt; 0:
+    print(n)
+    n -= 1</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Просити користувача ввести число, поки він не введе додатне. Потім вивести «Дякую!».</div><details><summary>Відповідь</summary><pre class="code">n = 0
+while n &lt;= 0:
+    n = int(input("Введи додатне число: "))
+print("Дякую!")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Подвоюй число 1, поки воно менше за 100. Виведи, скільки подвоєнь знадобилось.</div><details><summary>Відповідь</summary><pre class="code">x = 1
+steps = 0
+while x &lt; 100:
+    x *= 2
+    steps += 1
+print(x, steps)   # 128 7</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.6 <code>break</code> і <code>continue</code> — керування циклом</h3>
+<table>
+<tr><th>Слово</th><th>Що робить</th><th>Образ</th></tr>
+<tr><td><code>break</code></td><td><b>Негайно виходить</b> із циклу — решта ітерацій не виконується</td><td>«Стоп, досить, виходимо»</td></tr>
+<tr><td><code>continue</code></td><td>Пропускає <b>решту поточної ітерації</b> і переходить до наступної</td><td>«Цей пропускаємо, наступний!»</td></tr>
+</table>
+<pre class="code">for i in range(1, 7):
+    if i == 3:
+        continue       # 3 пропускаємо
+    if i == 5:
+        break          # на 5 зупиняємось зовсім
+    print(i)
+print("Кінець")</pre>
+<div class="out">1
+2
+4
+Кінець</div>
+<h4>👣 Покроково</h4>
+<div id="tr_break"></div>
+
+<h4>Практичний приклад: пошук у списку з <code>break</code></h4>
+<pre class="code">names = ["Іван", "Оля", "Петро", "Марія"]
+search = "Петро"
+
+for name in names:
+    if name == search:
+        print("Знайдено!")
+        break
+    print("Перевіряю", name)</pre>
+<div class="out">Перевіряю Іван
+Перевіряю Оля
+Знайдено!</div>
+<p>Після знахідки немає сенсу перевіряти «Марія» — тому <code>break</code>.</p>
+
+<h4>«Вічний» цикл з <code>break</code> — поширений шаблон</h4>
+<pre class="code">while True:                       # умова завжди правдива
+    text = input("Введи щось (або 'вихід'): ")
+    if text == "вихід":
+        break                     # єдиний спосіб вийти
+    print("Ти ввів:", text)
+print("Бувай!")</pre>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Виведи числа від 1 до 10, але пропусти 5 (використай <code>continue</code>).</div><details><summary>Відповідь</summary><pre class="code">for i in range(1, 11):
+    if i == 5:
+        continue
+    print(i)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Виведи числа від 1 до 10, але зупинись, щойно дійдеш до 5 (використай <code>break</code>). Що буде виведено?</div><details><summary>Відповідь</summary><pre class="code">for i in range(1, 11):
+    if i == 5:
+        break
+    print(i)
+# Виведе 1 2 3 4</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Є список <code>[4, 8, 15, 16, 23, 42]</code>. Знайди перше число, більше за 10, виведи його і зупини пошук.</div><details><summary>Відповідь</summary><pre class="code">for n in [4, 8, 15, 16, 23, 42]:
+    if n &gt; 10:
+        print("Перше &gt; 10:", n)
+        break</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Напиши «вічний» цикл, який просить ввести слово і виводить його довжину, а на слові <code>"стоп"</code> завершується.</div><details><summary>Відповідь</summary><pre class="code">while True:
+    word = input("Слово: ")
+    if word == "стоп":
+        break
+    print(len(word))</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.7 Вкладені цикли</h3>
+<p>Цикл усередині циклу. Для кожного кроку зовнішнього циклу внутрішній проходить <b>повністю</b>.</p>
+<pre class="code">for row in range(3):
+    for col in range(4):
+        print(row, col)</pre>
+<p>Натисни «Відтворити» і дивись, у якому порядку заповнюються клітинки:</p>
+<button class="btn small" onclick="playGrid()">▶ Відтворити</button> <span id="gridInfo" style="font-family:Consolas,monospace;margin-left:10px"></span>
+<div class="grid" id="grid1" style="grid-template-columns:repeat(4,60px)"></div>
+<p>Зовнішній цикл (<code>row</code>) робить 3 кроки, внутрішній (<code>col</code>) — 4 кроки на кожен зовнішній. Разом <b>3 × 4 = 12</b> виконань <code>print</code>.</p>
+
+<h4>Таблиця множення — класика вкладених циклів</h4>
+<pre class="code">for i in range(1, 4):
+    for j in range(1, 4):
+        print(i * j, end="\t")   # end="\t" — не переходити на новий рядок, а ставити табуляцію
+    print()                       # порожній print — перехід на новий рядок</pre>
+<div class="out">1	2	3
+2	4	6
+3	6	9</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Не запускаючи, скажи, скільки разів виведеться «*»:<br><code>for i in range(2):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;for j in range(5):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print("*")</code></div><details><summary>Відповідь</summary><pre class="code"># 2 × 5 = 10 разів</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Виведи квадрат 3×3 із символів <code>#</code> (три рядки по три символи).</div><details><summary>Відповідь</summary><pre class="code">for row in range(3):
+    for col in range(3):
+        print("#", end="")
+    print()</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Виведи всі пари <code>(a, b)</code>, де a від 1 до 2, b від 1 до 3.</div><details><summary>Відповідь</summary><pre class="code">for a in range(1, 3):
+    for b in range(1, 4):
+        print(a, b)
+# 1 1, 1 2, 1 3, 2 1, 2 2, 2 3</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.8 Корисні шаблони з циклами</h3>
+<div class="two">
+<div class="col"><h5>Лічильник (скільки разів щось сталось)</h5>
+<pre class="code">numbers = [3, 8, 1, 9, 4]
+count = 0
+for n in numbers:
+    if n &gt; 3:
+        count += 1
+print(count)   # 3</pre></div>
+<div class="col"><h5>Пошук максимуму</h5>
+<pre class="code">numbers = [3, 8, 1, 9, 4]
+biggest = numbers[0]
+for n in numbers:
+    if n &gt; biggest:
+        biggest = n
+print(biggest)   # 9</pre></div>
+<div class="col"><h5>Побудова нового списку</h5>
+<pre class="code">numbers = [1, 2, 3, 4]
+squares = []
+for n in numbers:
+    squares.append(n * n)
+print(squares)   # [1, 4, 9, 16]</pre></div>
+<div class="col"><h5>Прапорець (чи знайшлось щось)</h5>
+<pre class="code">numbers = [3, 8, 1]
+found = False
+for n in numbers:
+    if n == 8:
+        found = True
+        break
+print(found)   # True</pre></div>
+</div>
+<div class="box idea"><b>Скорочений запис</b> <code>count += 1</code> означає те саме, що <code>count = count + 1</code>. Аналогічно <code>-=</code>, <code>*=</code>, <code>/=</code>.</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1 (лічильник)</div><div>Порахуй, скільки від'ємних чисел у списку <code>[3, -1, -7, 0, 5, -2]</code>.</div><details><summary>Відповідь</summary><pre class="code">numbers = [3, -1, -7, 0, 5, -2]
+count = 0
+for n in numbers:
+    if n &lt; 0:
+        count += 1
+print(count)   # 3</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2 (мінімум)</div><div>Знайди найменше число у списку <code>[9, 4, 7, 2, 8]</code> без функції <code>min()</code>.</div><details><summary>Відповідь</summary><pre class="code">numbers = [9, 4, 7, 2, 8]
+smallest = numbers[0]
+for n in numbers:
+    if n &lt; smallest:
+        smallest = n
+print(smallest)   # 2</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3 (новий список)</div><div>Зі списку <code>[1, 2, 3, 4, 5, 6]</code> створи новий список лише з парних чисел.</div><details><summary>Відповідь</summary><pre class="code">numbers = [1, 2, 3, 4, 5, 6]
+evens = []
+for n in numbers:
+    if n % 2 == 0:
+        evens.append(n)
+print(evens)   # [2, 4, 6]</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4 (прапорець)</div><div>Перевір, чи є у списку імен <code>["Іван", "Оля", "Петро"]</code> ім'я «Оля». Виведи «є» або «немає».</div><details><summary>Відповідь</summary><pre class="code">names = ["Іван", "Оля", "Петро"]
+found = False
+for name in names:
+    if name == "Оля":
+        found = True
+        break
+print("є" if found else "немає")</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">2.9 Типові помилки з циклами</h3>
+<table>
+<tr><th>Помилка</th><th>Приклад</th><th>Як виправити</th></tr>
+<tr><td>Нескінченний <code>while</code></td><td><code>while x &lt; 5:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print(x)</code> (x не змінюється)</td><td>Додати <code>x += 1</code> у тіло</td></tr>
+<tr><td>«На один менше / більше» (off-by-one)</td><td>Хочу 1..10, пишу <code>range(10)</code> → отримую 0..9</td><td><code>range(1, 11)</code></td></tr>
+<tr><td>Накопичувач усередині циклу</td><td><code>for n in nums:</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;total = 0</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;total += n</code></td><td><code>total = 0</code> має бути <b>до</b> циклу</td></tr>
+<tr><td>Зміна списку під час проходу по ньому</td><td><code>for x in lst: lst.remove(x)</code></td><td>Проходити по копії: <code>for x in lst[:]:</code></td></tr>
+<tr><td>Плутанина, що виводить <code>print</code> у циклі, а що після</td><td>Відступ не там</td><td>Перевір відступи: те, що з відступом — повторюється</td></tr>
+</table>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Хочу вивести числа від 1 до 5. Що не так?<br><code>for i in range(5):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print(i)</code></div><details><summary>Відповідь</summary><pre class="code"># Виведе 0..4 — помилка "на один". Правильно:
+for i in range(1, 6):
+    print(i)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Що виведе цей код і чому? (зверни увагу на відступ останнього рядка)<br><code>for i in range(3):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("a")</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("b")</code><br><code>print("c")</code></div><details><summary>Відповідь</summary><pre class="code"># a b a b a b c
+# "a" і "b" з відступом — повторюються 3 рази,
+# "c" без відступу — виводиться один раз після циклу.</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✏️ Заповни пропуски</h3>
+<p>Порахувати суму чисел від 1 до 10 (включно):</p>
+<div class="blankcode" id="blanks2">total = <input class="blank" data-a="0" placeholder="?" style="width:60px">
+<input class="blank" data-a="for" placeholder="?" style="width:70px"> i <input class="blank" data-a="in" placeholder="?" style="width:60px"> range(1, <input class="blank" data-a="11" placeholder="?" style="width:60px">):
+    total <input class="blank" data-a="+=" placeholder="?" style="width:60px"> i
+print(total)    # має вивести 55</div>
+<div class="checkrow"><button class="btn small" onclick="checkBlanks('blanks2')">Перевірити</button> <span id="blanks2_res"></span></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✅ Тест: цикли</h3>
+<div class="quiz" id="quiz_loops"></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">🛠 Вправи: цикли</h3>
+
+<div class="ex"><h4>Вправа 1. Парні від 1 до 20 <span class="lvl">легко</span></h4>
+<p>Виведи всі парні числа від 1 до 20 — двома різними способами (через умову в циклі та через крок у <code>range</code>).</p>
+<details><summary>Розв'язок</summary>
+<pre class="code"># Спосіб 1
+for i in range(1, 21):
+    if i % 2 == 0:
+        print(i)
+
+# Спосіб 2
+for i in range(2, 21, 2):
+    print(i)</pre></details></div>
+
+<div class="ex"><h4>Вправа 2. Факторіал <span class="lvl">легко</span></h4>
+<p>Порахуй факторіал числа n (n! = 1·2·3·…·n). Для 5 відповідь 120.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">n = 5
+result = 1
+for i in range(1, n + 1):
+    result *= i
+print(result)   # 120</pre>
+<p>Початкове значення накопичувача тут 1, а не 0 — бо множимо.</p></details></div>
+
+<div class="ex"><h4>Вправа 3. Вгадай число <span class="lvl">середньо</span></h4>
+<p>Програма загадала число 42. Користувач вводить числа, поки не вгадає. Після кожної спроби пиши «більше» або «менше». У кінці — кількість спроб.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">secret = 42
+attempts = 0
+while True:
+    guess = int(input("Твоє число: "))
+    attempts += 1
+    if guess &lt; secret:
+        print("Більше")
+    elif guess &gt; secret:
+        print("Менше")
+    else:
+        print("Вгадав за", attempts, "спроб!")
+        break</pre></details></div>
+
+<div class="ex"><h4>Вправа 4. Сума цифр <span class="lvl">середньо</span></h4>
+<p>Для числа 1234 порахуй суму його цифр (1+2+3+4 = 10). Підказка: <code>n % 10</code> дає останню цифру, <code>n // 10</code> відкидає її.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">n = 1234
+total = 0
+while n &gt; 0:
+    total += n % 10
+    n = n // 10
+print(total)   # 10
+
+# Альтернатива через рядок:
+print(sum(int(d) for d in str(1234)))</pre></details></div>
+
+<div class="ex"><h4>Вправа 5. Зірочки <span class="lvl">складно</span></h4>
+<p>Виведи трикутник із зірочок висотою 4:</p>
+<pre class="code">*
+**
+***
+****</pre>
+<details><summary>Розв'язок</summary>
+<pre class="code">for i in range(1, 5):
+    print("*" * i)
+
+# Або через вкладені цикли:
+for i in range(1, 5):
+    for j in range(i):
+        print("*", end="")
+    print()</pre></details></div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="funcs">
+<h2>3. Функції: <code>def</code>, параметри, <code>return</code></h2>
+<p class="lead">Функція — це іменований шматок коду, який можна викликати скільки завгодно разів. Це спосіб не повторюватись і розбивати велику задачу на маленькі.</p>
+
+<div class="card">
+<h3 style="margin-top:0">3.1 Навіщо потрібні функції</h3>
+<p>Уяви кавову машину: ти кладеш зерна і воду (<b>вхід</b>), натискаєш кнопку (<b>виклик</b>), отримуєш каву (<b>результат</b>). Тобі не потрібно знати, що всередині — ти просто користуєшся.</p>
+<div class="machine">
+  <div class="mbox" style="border-color:var(--accent);background:var(--accent-soft)">вхід: 4</div>
+  <div class="marr">→</div>
+  <div class="mbox">square(x)<br><small style="font-weight:400">x * x</small></div>
+  <div class="marr">→</div>
+  <div class="mout">16</div>
+</div>
+<p>Функції потрібні, щоб:</p>
+<ul>
+<li><b>Не повторювати код.</b> Написав один раз — викликаєш 100 разів.</li>
+<li><b>Давати імена діям.</b> <code>calculate_discount(price)</code> читається краще, ніж 10 рядків обчислень.</li>
+<li><b>Розбивати задачу.</b> Велика програма = набір маленьких зрозумілих функцій.</li>
+<li><b>Легко виправляти.</b> Помилка в одному місці — виправив в одному місці.</li>
+</ul>
+<p>Ти вже користувався функціями: <code>print()</code>, <code>input()</code>, <code>int()</code>, <code>len()</code>, <code>range()</code> — усе це вбудовані функції. Тепер навчимося писати свої.</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Назви 3 вбудовані функції Python, якими ти вже користувався, і що кожна робить.</div><details><summary>Відповідь</summary><pre class="code"># print()  — виводить на екран
+# input()  — зчитує текст від користувача
+# int()    — перетворює на ціле число
+# len()    — довжина рядка/списку
+# range()  — послідовність чисел для циклу</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Дивлячись на «машину» вище: що буде на виході, якщо на вхід <code>square</code> подати 7? А якщо 0?</div><details><summary>Відповідь</summary><pre class="code"># square(7) → 49
+# square(0) → 0</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.2 Створення і виклик функції</h3>
+<pre class="code">def say_hello():          # 1. ВИЗНАЧЕННЯ: створюємо функцію
+    print("Привіт!")
+    print("Як справи?")
+
+say_hello()               # 2. ВИКЛИК: запускаємо її
+say_hello()               # можна викликати ще раз</pre>
+<div class="out">Привіт!
+Як справи?
+Привіт!
+Як справи?</div>
+<table>
+<tr><th>Елемент</th><th>Що означає</th></tr>
+<tr><td><code>def</code></td><td>«define» — визначити. Каже Python: «зараз я опишу функцію».</td></tr>
+<tr><td><code>say_hello</code></td><td>Ім'я функції. Правила як для змінних: маленькі літери, слова через <code>_</code>. Назва має описувати дію: <code>calculate_total</code>, <code>show_menu</code>.</td></tr>
+<tr><td><code>()</code></td><td>Дужки — обов'язкові, навіть порожні. Усередині — параметри (нижче).</td></tr>
+<tr><td><code>:</code> + відступ</td><td>Тіло функції. Усе з відступом — це те, що функція робить.</td></tr>
+<tr><td><code>say_hello()</code></td><td>Виклик. <b>Без дужок функція не запуститься!</b> <code>say_hello</code> без <code>()</code> — це просто посилання на функцію.</td></tr>
+</table>
+<div class="box warn"><b>Дуже важливо</b> Рядки з <code>def</code> лише <b>створюють</b> функцію, але <b>не виконують</b> її. Код усередині запуститься тільки тоді, коли ти напишеш виклик <code>say_hello()</code>. Якщо виклику немає — нічого не виведеться. Також функцію треба визначити <b>до</b> першого виклику (вище в коді).</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Створи функцію <code>line()</code>, яка виводить рядок із 20 дефісів. Виклич її двічі.</div><details><summary>Відповідь</summary><pre class="code">def line():
+    print("-" * 20)
+
+line()
+line()</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Що виведе цей код? (підказка: порахуй виклики)<br><code>def hi():</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("hi")</code><br><code>hi()</code><br><code>hi</code><br><code>hi()</code></div><details><summary>Відповідь</summary><pre class="code"># hi
+# hi
+# Середній рядок "hi" без дужок не викликає функцію — виведено лише 2 рази.</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Чому цей код падає з помилкою?<br><code>greet()</code><br><code>def greet():</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("Привіт")</code></div><details><summary>Відповідь</summary><pre class="code"># Виклик стоїть вище за визначення — Python ще не знає функції greet.
+# Спочатку def, потім виклик:
+def greet():
+    print("Привіт")
+
+greet()</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.3 Параметри та аргументи — передаємо дані всередину</h3>
+<p>Функція <code>say_hello</code> завжди вітає однаково. Зробимо так, щоб вона вітала конкретну людину:</p>
+<pre class="code">def greet(name):              # name — ПАРАМЕТР (змінна-«слот» для вхідних даних)
+    print("Привіт,", name)
+
+greet("Оля")                  # "Оля" — АРГУМЕНТ (конкретне значення, яке кладемо у слот)
+greet("Іван")</pre>
+<div class="out">Привіт, Оля
+Привіт, Іван</div>
+<div class="box idea"><b>Параметр vs аргумент</b> <b>Параметр</b> — ім'я в дужках при визначенні (<code>def greet(name)</code>). <b>Аргумент</b> — реальне значення при виклику (<code>greet("Оля")</code>). При виклику Python робить <code>name = "Оля"</code> автоматично.</div>
+
+<h4>Кілька параметрів</h4>
+<pre class="code">def show_info(name, age):
+    print(name, "має", age, "років")
+
+show_info("Марія", 20)        # name = "Марія", age = 20 — за ПОРЯДКОМ
+show_info(20, "Марія")        # переплутали порядок — буде нісенітниця</pre>
+<div class="out">Марія має 20 років
+20 має Марія років</div>
+
+<h4>Іменовані аргументи — коли порядок не хочеться пам'ятати</h4>
+<pre class="code">show_info(age=20, name="Марія")   # порядок будь-який, бо вказали імена</pre>
+<div class="out">Марія має 20 років</div>
+
+<h4>Значення за замовчуванням</h4>
+<pre class="code">def greet(name, greeting="Привіт"):   # greeting має значення за замовчуванням
+    print(greeting + ",", name)
+
+greet("Оля")                   # greeting не передали → буде "Привіт"
+greet("Оля", "Доброго ранку")  # передали → використається наше</pre>
+<div class="out">Привіт, Оля
+Доброго ранку, Оля</div>
+<div class="box warn"><b>Правило</b> Параметри зі значенням за замовчуванням пишуться <b>після</b> звичайних: <code>def f(a, b=1)</code> ✅, <code>def f(a=1, b)</code> ❌.</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Напиши функцію <code>say(word)</code>, яка виводить переданий текст з трьома знаками оклику. Виклич для «Ура» і «Клас».</div><details><summary>Відповідь</summary><pre class="code">def say(word):
+    print(word + "!!!")
+
+say("Ура")
+say("Клас")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Функція <code>rect(width, height)</code> виводить «Периметр: …» (2·(w+h)). Виклич її позиційно та з іменованими аргументами у зворотному порядку.</div><details><summary>Відповідь</summary><pre class="code">def rect(width, height):
+    print("Периметр:", 2 * (width + height))
+
+rect(3, 4)
+rect(height=4, width=3)   # той самий результат</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Додай параметр за замовчуванням: <code>power(base, exp=2)</code> виводить base у степені exp. Виклич <code>power(5)</code> і <code>power(2, 10)</code>.</div><details><summary>Відповідь</summary><pre class="code">def power(base, exp=2):
+    print(base ** exp)
+
+power(5)       # 25
+power(2, 10)   # 1024</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Що не так? <code>def f(a=1, b):</code></div><details><summary>Відповідь</summary><pre class="code"># Параметр зі значенням за замовчуванням має йти ПІСЛЯ звичайних:
+def f(b, a=1):</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.4 <code>return</code> — повертаємо результат назовні</h3>
+<p>Поки що наші функції лише друкували. Але найчастіше функція має <b>порахувати щось і віддати результат</b>, щоб його можна було використати далі.</p>
+<pre class="code">def square(x):
+    result = x * x
+    return result          # ВІДДАЄМО результат тому, хто викликав
+
+a = square(4)              # a отримує 16
+print(a)
+print(square(3) + 1)       # результат можна одразу використати у виразі</pre>
+<div class="out">16
+10</div>
+<h4>👣 Покроково — слідкуй за стрибками між викликом і тілом функції</h4>
+<div id="tr_func"></div>
+
+<h4>print vs return — найважливіша різниця для початківців</h4>
+<table>
+<tr><th></th><th><code>print(x)</code></th><th><code>return x</code></th></tr>
+<tr><td>Що робить</td><td><b>Показує</b> значення на екрані людині</td><td><b>Віддає</b> значення програмі для подальшої роботи</td></tr>
+<tr><td>Можна зберегти у змінну?</td><td>Ні (<code>a = print(5)</code> → <code>a</code> буде <code>None</code>)</td><td>Так (<code>a = square(5)</code> → 25)</td></tr>
+<tr><td>Що відбувається з функцією</td><td>Продовжує працювати далі</td><td><b>Негайно завершується</b>, код після return не виконується</td></tr>
+<tr><td>Аналогія</td><td>Кухар <i>кричить</i> «страва готова»</td><td>Кухар <i>віддає</i> тарілку офіціанту</td></tr>
+</table>
+<pre class="code">def bad_add(a, b):
+    print(a + b)            # лише показує
+
+def good_add(a, b):
+    return a + b            # віддає
+
+x = bad_add(2, 3)           # на екрані 5, але...
+print(x)                    # ...x = None, бо функція нічого не повернула
+
+y = good_add(2, 3)
+print(y * 10)               # 50 — результат можна використати</pre>
+<div class="out">5
+None
+50</div>
+<div class="box err"><b>Помилка №1 у функціях</b> Функція рахує через <code>print</code>, а потім студент намагається використати результат — і отримує <code>None</code>. <b>Якщо результат потрібен далі — використовуй <code>return</code>.</b></div>
+
+<h4>Код після <code>return</code> не виконується</h4>
+<pre class="code">def check(n):
+    if n &gt; 0:
+        return "додатне"
+    return "недодатне"       # сюди дійдемо тільки якщо перший return не спрацював
+    print("Це ніколи не виведеться")
+
+print(check(5))
+print(check(-2))</pre>
+<div class="out">додатне
+недодатне</div>
+
+<h4>Повернути кілька значень</h4>
+<pre class="code">def min_max(numbers):
+    return min(numbers), max(numbers)
+
+low, high = min_max([4, 9, 1, 7])
+print(low, high)</pre>
+<div class="out">1 9</div>
+
+<h4>🎛 Машина функцій</h4>
+<p>Обери функцію, введи аргументи — побачиш, як відбувається підстановка і що повертається:</p>
+<select id="fmSel" onchange="fmSetup()">
+<option value="square">square(x) → x * x</option>
+<option value="add">add(a, b) → a + b</option>
+<option value="is_even">is_even(n) → n % 2 == 0</option>
+<option value="area">area(w, h=1) → w * h</option>
+</select>
+<span id="fmInputs"></span>
+<button class="btn small" onclick="fmRun()">Викликати</button>
+<div id="fmOut"></div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Напиши функцію <code>double(n)</code>, що <b>повертає</b> подвоєне число. Збережи результат <code>double(21)</code> у змінну і виведи її.</div><details><summary>Відповідь</summary><pre class="code">def double(n):
+    return n * 2
+
+result = double(21)
+print(result)   # 42</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Що виведе код? Поясни, звідки взявся <code>None</code>.<br><code>def show(x):</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print(x * 2)</code><br><code>y = show(5)</code><br><code>print(y)</code></div><details><summary>Відповідь</summary><pre class="code"># 10
+# None
+# show лише друкує і нічого не return-ить, тому y = None.</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Перепиши функцію із завдання 2 так, щоб <code>print(y)</code> вивів 10.</div><details><summary>Відповідь</summary><pre class="code">def show(x):
+    return x * 2
+
+y = show(5)
+print(y)   # 10</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Функція <code>sign(n)</code> повертає «+», якщо n &gt; 0, «-», якщо n &lt; 0, інакше «0». Використай кілька <code>return</code>.</div><details><summary>Відповідь</summary><pre class="code">def sign(n):
+    if n &gt; 0:
+        return "+"
+    if n &lt; 0:
+        return "-"
+    return "0"
+
+print(sign(7), sign(-2), sign(0))   # + - 0</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 5</div><div>Функція <code>divide(a, b)</code> повертає два значення: цілу частину та остачу від ділення. Розпакуй їх у дві змінні.</div><details><summary>Відповідь</summary><pre class="code">def divide(a, b):
+    return a // b, a % b
+
+q, r = divide(17, 5)
+print(q, r)   # 3 2</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.5 Область видимості: локальні та глобальні змінні</h3>
+<p>Змінна, створена <b>всередині</b> функції, живе лише всередині неї. Зовні її не видно. Це називається <b>локальна</b> змінна.</p>
+<pre class="code">def calc():
+    secret = 42            # локальна змінна
+    print(secret)
+
+calc()
+print(secret)              # ПОМИЛКА: NameError — зовні такої змінної немає</pre>
+<div class="out">42
+NameError: name 'secret' is not defined</div>
+<p>А якщо всередині функції створити змінну з таким самим іменем, як зовні? Створиться <b>нова, окрема</b> локальна змінна, а зовнішня не зміниться:</p>
+<div id="tr_scope"></div>
+<div class="box idea"><b>Образ</b> Функція — це кімната. Що в кімнаті створили, те в кімнаті й лишається. Виглянути назовні (прочитати глобальну змінну) можна, а от змінити її просто так — ні.</div>
+<p>Читати глобальну змінну всередині функції можна:</p>
+<pre class="code">tax = 0.2                   # глобальна
+
+def with_tax(price):
+    return price * (1 + tax)   # читаємо tax — це дозволено
+
+print(with_tax(100))</pre>
+<div class="out">120.0</div>
+<div class="box warn"><b>Правило хорошого коду</b> Усе, що функції потрібно — передавай через параметри. Усе, що вона порахувала — віддавай через <code>return</code>. Тоді функція незалежна, і її легко тестувати та перевикористовувати. Слово <code>global</code> існує, але початківцям його краще не вживати.</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Що виведе код і чому?<br><code>def f():</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;msg = "привіт"</code><br><code>f()</code><br><code>print(msg)</code></div><details><summary>Відповідь</summary><pre class="code"># NameError: name 'msg' is not defined
+# msg — локальна змінна, після завершення f() вона зникає.</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Виправ попередній код так, щоб зовні можна було вивести «привіт» — не через <code>global</code>, а через <code>return</code>.</div><details><summary>Відповідь</summary><pre class="code">def f():
+    msg = "привіт"
+    return msg
+
+text = f()
+print(text)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Що виведе код?<br><code>n = 1</code><br><code>def inc():</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;n = 2</code><br><code>inc()</code><br><code>print(n)</code></div><details><summary>Відповідь</summary><pre class="code"># 1
+# Усередині inc створилася окрема локальна n = 2; глобальна n не змінилася.</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 4</div><div>Функція <code>total_price(price)</code> повертає ціну з урахуванням глобальної змінної <code>discount = 0.1</code> (знижка 10%). Читати глобальну змінну можна.</div><details><summary>Відповідь</summary><pre class="code">discount = 0.1
+
+def total_price(price):
+    return price * (1 - discount)
+
+print(total_price(200))   # 180.0</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.6 Функції викликають функції</h3>
+<p>Велика задача розкладається на малі. Кожна функція робить одну річ:</p>
+<pre class="code">def is_even(n):
+    return n % 2 == 0
+
+def count_even(numbers):
+    count = 0
+    for n in numbers:
+        if is_even(n):          # використовуємо іншу функцію
+            count += 1
+    return count
+
+def report(numbers):
+    total = count_even(numbers)
+    print("Парних чисел:", total)
+
+report([1, 2, 3, 4, 5, 6])</pre>
+<div class="out">Парних чисел: 3</div>
+<p>Зверни увагу: тут є і <b>умова</b>, і <b>цикл</b>, і <b>функції</b> — усі три теми працюють разом.</p>
+
+<h4>Документація функції (docstring)</h4>
+<pre class="code">def area(width, height):
+    """Повертає площу прямокутника."""     # опис у потрійних лапках одразу після def
+    return width * height
+
+help(area)   # покаже опис</pre>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Є функція <code>is_even(n)</code>. Напиши функцію <code>half_if_even(n)</code>, яка повертає n/2, якщо число парне (перевір через <code>is_even</code>), інакше — саме n.</div><details><summary>Відповідь</summary><pre class="code">def is_even(n):
+    return n % 2 == 0
+
+def half_if_even(n):
+    if is_even(n):
+        return n // 2
+    return n
+
+print(half_if_even(10), half_if_even(7))   # 5 7</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Розбий на дві функції: <code>square(x)</code> повертає x², а <code>sum_of_squares(numbers)</code> повертає суму квадратів списку, використовуючи <code>square</code>.</div><details><summary>Відповідь</summary><pre class="code">def square(x):
+    return x * x
+
+def sum_of_squares(numbers):
+    total = 0
+    for n in numbers:
+        total += square(n)
+    return total
+
+print(sum_of_squares([1, 2, 3]))   # 14</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 3</div><div>Додай docstring до функції <code>square</code> і виведи його через <code>help(square)</code>.</div><details><summary>Відповідь</summary><pre class="code">def square(x):
+    """Повертає квадрат числа x."""
+    return x * x
+
+help(square)</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">3.7 Типові помилки з функціями</h3>
+<table>
+<tr><th>Помилка</th><th>Приклад</th><th>Виправлення</th></tr>
+<tr><td>Виклик без дужок</td><td><code>say_hello</code></td><td><code>say_hello()</code></td></tr>
+<tr><td>Виклик до визначення</td><td><code>greet("A")</code> написано <i>вище</i> ніж <code>def greet</code></td><td>Спочатку <code>def</code>, потім виклик</td></tr>
+<tr><td>print замість return</td><td><code>x = f(2)</code> → <code>None</code></td><td>Використати <code>return</code></td></tr>
+<tr><td>Не та кількість аргументів</td><td><code>def f(a, b)</code>, виклик <code>f(1)</code></td><td><code>f(1, 2)</code> або дати <code>b</code> значення за замовчуванням</td></tr>
+<tr><td>Використання локальної змінної зовні</td><td><code>NameError</code></td><td>Повернути через <code>return</code></td></tr>
+<tr><td>Код після <code>return</code></td><td>Він не виконується</td><td>Переставити <code>return</code> у кінець</td></tr>
+</table>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>У кожному фрагменті одна помилка. Знайди:<br>а) <code>def add(a, b) return a + b</code><br>б) <code>result = add(1)</code> (add приймає два параметри)<br>в) <code>print(add)</code> замість результату 1+2</div><details><summary>Відповідь</summary><pre class="code"># а) def add(a, b):\n    return a + b   — двокрапка, тіло з відступом
+# б) add(1, 2)                         — два аргументи
+# в) print(add(1, 2))                  — виклик із дужками</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Чому тут завжди виводиться лише «старт»?<br><code>def run():</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("старт")</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;return</code><br><code>&nbsp;&nbsp;&nbsp;&nbsp;print("фініш")</code></div><details><summary>Відповідь</summary><pre class="code"># return завершує функцію — рядок після нього недосяжний.
+# Переставити return у кінець або прибрати.</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✏️ Заповни пропуски</h3>
+<p>Функція, яка повертає більше з двох чисел:</p>
+<div class="blankcode" id="blanks3"><input class="blank" data-a="def" placeholder="?" style="width:70px"> bigger(a, b)<input class="blank" data-a=":" placeholder="?" style="width:50px">
+    if a &gt; b:
+        <input class="blank" data-a="return" placeholder="?"> a
+    <input class="blank" data-a="else" placeholder="?">:
+        return b
+
+result = bigger(3, <input class="blank" data-a="8" placeholder="?" style="width:50px">)
+print(result)    # має вивести 8</div>
+<div class="checkrow"><button class="btn small" onclick="checkBlanks('blanks3')">Перевірити</button> <span id="blanks3_res"></span></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">✅ Тест: функції</h3>
+<div class="quiz" id="quiz_funcs"></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">🛠 Вправи: функції</h3>
+
+<div class="ex"><h4>Вправа 1. Привітання <span class="lvl">легко</span></h4>
+<p>Напиши функцію <code>greet(name)</code>, яка <b>повертає</b> (не друкує!) рядок «Привіт, &lt;ім'я&gt;!». Виклич її для трьох різних імен.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def greet(name):
+    return "Привіт, " + name + "!"
+
+print(greet("Оля"))
+print(greet("Іван"))
+print(greet("Марія"))</pre></details></div>
+
+<div class="ex"><h4>Вправа 2. Температура <span class="lvl">легко</span></h4>
+<p>Функція <code>to_fahrenheit(celsius)</code>: F = C · 9/5 + 32. Перевір: 0 → 32.0, 100 → 212.0.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def to_fahrenheit(celsius):
+    return celsius * 9 / 5 + 32
+
+print(to_fahrenheit(0))     # 32.0
+print(to_fahrenheit(100))   # 212.0</pre></details></div>
+
+<div class="ex"><h4>Вправа 3. Середнє значення <span class="lvl">середньо</span></h4>
+<p>Функція <code>average(numbers)</code>, яка повертає середнє арифметичне списку. Якщо список порожній — повертає 0 (інакше буде ділення на нуль). Не використовуй <code>sum()</code> — порахуй циклом.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def average(numbers):
+    if len(numbers) == 0:
+        return 0
+    total = 0
+    for n in numbers:
+        total += n
+    return total / len(numbers)
+
+print(average([2, 4, 6]))   # 4.0
+print(average([]))          # 0</pre></details></div>
+
+<div class="ex"><h4>Вправа 4. Просте число <span class="lvl">середньо</span></h4>
+<p>Функція <code>is_prime(n)</code> повертає <code>True</code>, якщо n — просте (ділиться лише на 1 і на себе). Потім виведи всі прості числа від 2 до 30, використавши цю функцію.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def is_prime(n):
+    if n &lt; 2:
+        return False
+    for d in range(2, n):
+        if n % d == 0:
+            return False      # знайшли дільник — точно не просте
+    return True               # дільників не знайшли
+
+for i in range(2, 31):
+    if is_prime(i):
+        print(i, end=" ")
+# 2 3 5 7 11 13 17 19 23 29</pre></details></div>
+
+<div class="ex"><h4>Вправа 5. Пароль <span class="lvl">складно</span></h4>
+<p>Функція <code>is_strong(password)</code> повертає <code>True</code>, якщо пароль має довжину ≥ 8, містить хоча б одну цифру і хоча б одну велику літеру. Підказка: методи рядка <code>.isdigit()</code>, <code>.isupper()</code> працюють для окремих символів.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def is_strong(password):
+    if len(password) &lt; 8:
+        return False
+    has_digit = False
+    has_upper = False
+    for ch in password:
+        if ch.isdigit():
+            has_digit = True
+        if ch.isupper():
+            has_upper = True
+    return has_digit and has_upper
+
+print(is_strong("abc"))          # False
+print(is_strong("Password1"))    # True</pre></details></div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="combo">
+<h2>4. Все разом: умови + цикли + функції</h2>
+<p class="lead">Справжні програми — це завжди поєднання трьох тем. Розберемо кілька класичних задач повністю.</p>
+
+<div class="card">
+<h3 style="margin-top:0">4.1 FizzBuzz — найвідоміша задача на співбесідах</h3>
+<p>Для чисел від 1 до 15: якщо ділиться на 3 — пиши «Fizz», на 5 — «Buzz», на обидва — «FizzBuzz», інакше — саме число.</p>
+<pre class="code">def fizzbuzz(n):
+    if n % 15 == 0:            # спочатку найсуворіша умова!
+        return "FizzBuzz"
+    elif n % 3 == 0:
+        return "Fizz"
+    elif n % 5 == 0:
+        return "Buzz"
+    else:
+        return str(n)
+
+for i in range(1, 16):
+    print(fizzbuzz(i), end=" ")</pre>
+<div class="out">1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz 11 Fizz 13 14 FizzBuzz</div>
+<div class="box warn"><b>Чому перевірка на 15 перша?</b> Якщо спочатку перевірити <code>n % 3 == 0</code>, то для 15 спрацює «Fizz» і до «FizzBuzz» ніколи не дійде. Пам'ятаєш правило про порядок умов?</div>
+<p>🎛 Спробуй сам: введи число і побачиш, через які перевірки воно пройшло.</p>
+<input type="number" id="fbIn" value="15" style="width:90px"> <button class="btn small" onclick="runFB()">fizzbuzz(n)</button>
+<div id="fbOut"></div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Зміни функцію так, щоб замість «Fizz»/«Buzz» вона повертала «Три»/«П'ять»/«ТриП'ять», і виведи результат для чисел 1–20.</div><details><summary>Відповідь</summary><pre class="code">def fizzbuzz(n):
+    if n % 15 == 0:
+        return "ТриП'ять"
+    elif n % 3 == 0:
+        return "Три"
+    elif n % 5 == 0:
+        return "П'ять"
+    return str(n)
+
+for i in range(1, 21):
+    print(fizzbuzz(i), end=" ")</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Переставь перевірку <code>n % 15</code> у кінець і подивись у симуляторі, що станеться з числом 15. Поясни одним реченням.</div><details><summary>Відповідь</summary><pre class="code"># 15 % 3 == 0 спрацює першим і поверне "Fizz" —
+# до перевірки на 15 програма ніколи не дійде.</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">4.2 Меню програми — шаблон, який використовують усюди</h3>
+<pre class="code">def show_menu():
+    print("1 - Додати")
+    print("2 - Показати")
+    print("0 - Вийти")
+
+def add_item(items):
+    item = input("Що додати? ")
+    items.append(item)
+    print("Додано!")
+
+def show_items(items):
+    if not items:                      # якщо список порожній
+        print("Список порожній")
+    else:
+        for i, item in enumerate(items, 1):
+            print(i, item)
+
+items = []
+while True:
+    show_menu()
+    choice = input("Вибір: ")
+    if choice == "1":
+        add_item(items)
+    elif choice == "2":
+        show_items(items)
+    elif choice == "0":
+        print("Бувай!")
+        break
+    else:
+        print("Невідома команда")</pre>
+<p>Зверни увагу на структуру: <b>функції</b> описують окремі дії, <b>while True</b> крутить меню, <b>if/elif</b> обирає дію, <b>for</b> виводить список. Так виглядає більшість консольних програм.</p>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Додай у меню пункт <code>3 - Видалити останній</code>: функція <code>remove_last(items)</code> видаляє останній елемент (<code>items.pop()</code>), а якщо список порожній — виводить «Нічого видаляти».</div><details><summary>Відповідь</summary><pre class="code">def remove_last(items):
+    if not items:
+        print("Нічого видаляти")
+    else:
+        items.pop()
+        print("Видалено")
+
+# у циклі меню:
+#   elif choice == "3":
+#       remove_last(items)</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Додай лічильник: після виходу з меню виведи, скільки команд користувач ввів загалом.</div><details><summary>Відповідь</summary><pre class="code">commands = 0
+while True:
+    show_menu()
+    choice = input("Вибір: ")
+    commands += 1
+    if choice == "0":
+        break
+    # ... решта гілок ...
+print("Команд введено:", commands)</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">4.3 Оцінки класу — обробка даних</h3>
+<pre class="code">def grade_letter(score):
+    if score &gt;= 90:
+        return "A"
+    elif score &gt;= 75:
+        return "B"
+    elif score &gt;= 60:
+        return "C"
+    return "F"
+
+def analyze(scores):
+    best = scores[0]
+    failed = 0
+    total = 0
+    for s in scores:
+        total += s
+        if s &gt; best:
+            best = s
+        if grade_letter(s) == "F":
+            failed += 1
+    return total / len(scores), best, failed
+
+scores = [92, 67, 45, 78, 88]
+avg, best, failed = analyze(scores)
+print("Середній:", avg)
+print("Найкращий:", best)
+print("Не склали:", failed)</pre>
+<div class="out">Середній: 74.0
+Найкращий: 92
+Не склали: 1</div>
+
+<div class="mini"><h4>🏋️ Міні-практика: закріпи цей пункт</h4><p class="msub">Кожне завдання — на 1–3 хвилини. Спочатку зроби сам, потім звірся.</p><div class="mtask"><div class="mt">Завдання 1</div><div>Додай до функції <code>analyze</code> підрахунок кількості відмінників (оцінка «A») і поверни його четвертим значенням.</div><details><summary>Відповідь</summary><pre class="code">def analyze(scores):
+    best = scores[0]
+    failed = 0
+    excellent = 0
+    total = 0
+    for s in scores:
+        total += s
+        if s &gt; best:
+            best = s
+        letter = grade_letter(s)
+        if letter == "F":
+            failed += 1
+        if letter == "A":
+            excellent += 1
+    return total / len(scores), best, failed, excellent</pre></details></div>
+<div class="mtask"><div class="mt">Завдання 2</div><div>Напиши функцію <code>print_report(scores)</code>, яка для кожного балу виводить рядок виду <code>92 → A</code>, використовуючи <code>grade_letter</code>.</div><details><summary>Відповідь</summary><pre class="code">def print_report(scores):
+    for s in scores:
+        print(s, "→", grade_letter(s))
+
+print_report([92, 67, 45, 78, 88])</pre></details></div></div>
+</div>
+
+<div class="card">
+<h3 style="margin-top:0">🛠 Підсумкові вправи</h3>
+<div class="ex"><h4>Вправа 1. Статистика тексту <span class="lvl">середньо</span></h4>
+<p>Функція <code>count_vowels(text)</code> повертає кількість голосних (а, е, є, и, і, ї, о, у, ю, я) у тексті. Потім запитай у користувача речення і виведи результат.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def count_vowels(text):
+    vowels = "аеєиіїоуюя"
+    count = 0
+    for ch in text.lower():
+        if ch in vowels:
+            count += 1
+    return count
+
+sentence = input("Речення: ")
+print("Голосних:", count_vowels(sentence))</pre></details></div>
+
+<div class="ex"><h4>Вправа 2. Банкомат <span class="lvl">складно</span></h4>
+<p>Баланс = 1000. У циклі показуй меню: 1 — поповнити, 2 — зняти, 3 — баланс, 0 — вихід. Зняти можна лише суму ≤ балансу й &gt; 0. Кожну дію оформи окремою функцією, яка приймає баланс і <b>повертає</b> новий баланс.</p>
+<details><summary>Розв'язок</summary>
+<pre class="code">def deposit(balance):
+    amount = float(input("Сума: "))
+    if amount &lt;= 0:
+        print("Сума має бути додатною")
+        return balance
+    return balance + amount
+
+def withdraw(balance):
+    amount = float(input("Сума: "))
+    if amount &lt;= 0 or amount &gt; balance:
+        print("Неможливо зняти цю суму")
+        return balance
+    return balance - amount
+
+balance = 1000
+while True:
+    print("1 Поповнити  2 Зняти  3 Баланс  0 Вихід")
+    choice = input("&gt; ")
+    if choice == "1":
+        balance = deposit(balance)
+    elif choice == "2":
+        balance = withdraw(balance)
+    elif choice == "3":
+        print("Баланс:", balance)
+    elif choice == "0":
+        break
+    else:
+        print("Невідома команда")</pre></details></div>
+
+<div class="ex"><h4>Вправа 3. Піраміда чисел <span class="lvl">складно</span></h4>
+<p>Функція <code>pyramid(n)</code> виводить:</p>
+<pre class="code">1
+1 2
+1 2 3
+1 2 3 4</pre>
+<details><summary>Розв'язок</summary>
+<pre class="code">def pyramid(n):
+    for row in range(1, n + 1):
+        for num in range(1, row + 1):
+            print(num, end=" ")
+        print()
+
+pyramid(4)</pre></details></div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="final">
+<h2>Підсумковий тест</h2>
+<p class="lead">12 запитань на всі три теми. Результат ≥ 10 — ти засвоїв матеріал.</p>
+<div class="card">
+<div class="quiz" id="quiz_final"></div>
+<div id="finalScore"></div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="play">
+<h2>Пісочниця: запусти справжній Python</h2>
+<p class="lead">Тут працює Python прямо в браузері. Натисни «Завантажити Python» (один раз, потрібен інтернет), потім пиши код і запускай. <code>input()</code> тут запитує через вікно браузера.</p>
+<div class="card">
+<button class="btn" id="pyLoadBtn" onclick="loadPy()">⬇ Завантажити Python</button>
+<span id="pyStatus" style="color:var(--muted)"></span>
+<p>Готові приклади: 
+<button class="btn sec small" onclick="setPy('ex1')">умови</button>
+<button class="btn sec small" onclick="setPy('ex2')">цикл for</button>
+<button class="btn sec small" onclick="setPy('ex3')">while</button>
+<button class="btn sec small" onclick="setPy('ex4')">функція</button>
+<button class="btn sec small" onclick="setPy('ex5')">все разом</button>
+</p>
+<textarea id="pyCode">age = 17
+if age &gt;= 18:
+    print("Дорослий")
+else:
+    print("Ще ні, залишилось", 18 - age)</textarea>
+<div><button class="btn green" id="pyRunBtn" onclick="runPy()" disabled>▶ Запустити (Ctrl+Enter)</button> <button class="btn sec" onclick="document.getElementById('pyOut').textContent=''">Очистити вивід</button></div>
+<div class="pyout" id="pyOut">Вивід з'явиться тут.</div>
+</div>
+</section>
+
+<!-- ============================================================ -->
+<section class="part" id="cheat">
+<h2>Шпаргалка</h2>
+<div class="card cheat">
+<div class="two">
+<div class="col"><h5>Умови</h5>
+<pre class="code">if умова:
+    ...
+elif інша_умова:
+    ...
+else:
+    ...
+
+# порівняння: == != &gt; &lt; &gt;= &lt;=
+# логіка: and or not
+# діапазон: 1 &lt;= x &lt;= 10
+# належність: x in [1, 2, 3]
+# в один рядок:
+y = "так" if x &gt; 0 else "ні"</pre></div>
+<div class="col"><h5>Цикли</h5>
+<pre class="code">for i in range(5):        # 0..4
+for i in range(1, 6):     # 1..5
+for i in range(0, 10, 2): # 0,2,4,6,8
+for x in список:
+for i, x in enumerate(список):
+
+while умова:
+    ...  # не забудь змінити умову!
+
+break      # вийти з циклу
+continue   # до наступної ітерації</pre></div>
+<div class="col"><h5>Функції</h5>
+<pre class="code">def ім'я(параметр1, параметр2=значення):
+    """Що робить функція."""
+    ...
+    return результат
+
+x = ім'я(аргумент1)          # виклик
+x = ім'я(параметр2=5, параметр1=3)
+
+# return — віддати результат
+# print  — лише показати
+# змінні всередині — локальні</pre></div>
+<div class="col"><h5>Шаблони</h5>
+<pre class="code"># накопичувач
+total = 0
+for n in nums:
+    total += n
+
+# лічильник з умовою
+count = 0
+for n in nums:
+    if n &gt; 0:
+        count += 1
+
+# меню
+while True:
+    c = input()
+    if c == "0":
+        break</pre></div>
+</div>
+</div>
+<div class="card">
+<h4 style="margin-top:0">Чек-лист «я засвоїв тему», якщо можу…</h4>
+<ul>
+<li>…пояснити різницю між <code>=</code> і <code>==</code>.</li>
+<li>…сказати, чому порядок <code>elif</code> має значення.</li>
+<li>…скласти умову з <code>and</code>/<code>or</code>/<code>not</code> і передбачити її результат.</li>
+<li>…назвати числа, які дає <code>range(2, 11, 3)</code>, не запускаючи код.</li>
+<li>…пояснити, коли брати <code>for</code>, а коли <code>while</code>.</li>
+<li>…написати цикл-накопичувач і цикл-лічильник.</li>
+<li>…пояснити різницю між <code>break</code> і <code>continue</code>.</li>
+<li>…написати функцію з параметрами і <code>return</code> та використати її результат.</li>
+<li>…пояснити, чому <code>x = f()</code> дає <code>None</code>, якщо у <code>f</code> лише <code>print</code>.</li>
+<li>…сказати, що буде зі змінною, створеною всередині функції, після її завершення.</li>
+</ul>
+</div>
+</section>
+
+</main>
+<footer>Інтерактивний посібник з основ Python · умови · цикли · функції</footer>
+
+<script>
+/* ---------- Syntax highlighter ---------- */
+const KW = ["def","return","if","elif","else","for","while","in","and","or","not","break","continue","True","False","None","import","from","as","global","pass","is","lambda","with","try","except","finally","class"];
+const BUILTINS = ["print","input","int","float","str","len","range","enumerate","min","max","sum","type","help","append","lower","isdigit","isupper","list","abs","round"];
+function esc(s){return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
+function highlight(src){
+  let out="", i=0;
+  while(i<src.length){
+    const c=src[i];
+    if(c==="#"){ let j=src.indexOf("\n",i); if(j<0)j=src.length; out+='<span class="cm">'+esc(src.slice(i,j))+'</span>'; i=j; continue;}
+    if(src.startsWith('"""',i)){ let j=src.indexOf('"""',i+3); j=j<0?src.length:j+3; out+='<span class="str">'+esc(src.slice(i,j))+'</span>'; i=j; continue;}
+    if(c==='"'||c==="'"){ let j=i+1; while(j<src.length && src[j]!==c && src[j]!=="\n"){ if(src[j]==="\\")j++; j++;} j=Math.min(j+1,src.length); out+='<span class="str">'+esc(src.slice(i,j))+'</span>'; i=j; continue;}
+    if(/[A-Za-z_]/.test(c)){ let j=i; while(j<src.length && /[A-Za-z0-9_]/.test(src[j]))j++; const w=src.slice(i,j);
+      if(KW.includes(w)) out+='<span class="kw">'+w+'</span>'; else if(BUILTINS.includes(w)&&src[j]==="(") out+='<span class="fn">'+w+'</span>'; else out+=esc(w); i=j; continue;}
+    if(/[0-9]/.test(c)){ let j=i; while(j<src.length && /[0-9.]/.test(src[j]))j++; out+='<span class="num">'+src.slice(i,j)+'</span>'; i=j; continue;}
+    out+=esc(c); i++;
+  }
+  return out;
+}
+document.querySelectorAll("pre.code").forEach(p=>{ p.innerHTML=highlight(p.textContent); });
+
+/* ---------- Progress ---------- */
+const QUIZ_IDS=["quiz_cond","quiz_loops","quiz_funcs","quiz_final","blanks1","blanks2","blanks3"];
+let progress={};
+try{ progress=JSON.parse(localStorage.getItem("py_guide_progress")||"{}"); }catch(e){progress={};}
+function saveProgress(){ try{localStorage.setItem("py_guide_progress",JSON.stringify(progress));}catch(e){} updateProgress(); }
+function updateProgress(){
+  const done=QUIZ_IDS.filter(k=>progress[k]).length;
+  const pct=Math.round(done/QUIZ_IDS.length*100);
+  document.getElementById("progressFill").style.width=pct+"%";
+  document.getElementById("progressText").textContent=pct+"%";
+}
+updateProgress();
+
+/* ---------- Flow chart ---------- */
+function runFlow(){
+  const age=parseInt(document.getElementById("flowAge").value)||0;
+  document.getElementById("flowAgeShow").textContent=age;
+  const nodes=document.querySelectorAll("#flow1 .node");
+  nodes.forEach(n=>n.classList.remove("on"));
+  const path=age>=16?["s","d","t","e"]:["s","d","f","e"];
+  let k=0;
+  const timer=setInterval(()=>{
+    if(k>=path.length){clearInterval(timer);
+      const m=document.getElementById("flowMsg"); m.style.display="block";
+      m.innerHTML="<b>Результат:</b> умова <code>"+age+" &gt;= 16</code> → <b>"+(age>=16?"True":"False")+"</b>, тому виконалась гілка <b>"+(age>=16?"if":"else")+"</b>. Вивід: <code>"+(age>=16?"Проходьте!":"Вибачте, не можна")+"</code>";
+      return;}
+    document.querySelector('#flow1 .node[data-n="'+path[k]+'"]').classList.add("on"); k++;
+  },450);
+}
+
+/* ---------- Comparison calc ---------- */
+function runCmp(){
+  const a=parseFloat(document.getElementById("cmpA").value), b=parseFloat(document.getElementById("cmpB").value);
+  const op=document.getElementById("cmpOp").value;
+  const r={"==":a===b,"!=":a!==b,">":a>b,"<":a<b,">=":a>=b,"<=":a<=b}[op];
+  const el=document.getElementById("cmpRes");
+  el.innerHTML=a+" "+esc(op)+" "+b+" → <span class='badge "+(r?"t":"f")+"'>"+(r?"True":"False")+"</span>";
+}
+
+/* ---------- Grade simulator ---------- */
+function runGrade(){
+  const s=parseInt(document.getElementById("gradeIn").value)||0;
+  const checks=[["score &gt;= 90",s>=90,"Відмінно","if"],["score &gt;= 75",s>=75,"Добре","elif"],["score &gt;= 60",s>=60,"Задовільно","elif"]];
+  let html="<table><tr><th>Крок</th><th>Перевірка</th><th>Результат</th><th>Дія</th></tr>";
+  let done=false, res="Незадовільно";
+  checks.forEach((c,i)=>{
+    if(done){ html+="<tr><td>"+(i+1)+"</td><td><code>"+c[3]+" "+c[0]+"</code></td><td colspan=2 style='color:#999'>не перевіряється — програма вже вийшла</td></tr>"; return;}
+    const ok=c[1];
+    html+="<tr class='"+(ok?"hl":"")+"'><td>"+(i+1)+"</td><td><code>"+c[3]+" "+c[0]+"</code> → "+s+" ≥ "+c[0].slice(-2)+"</td><td><span class='badge "+(ok?"t":"f")+"'>"+(ok?"True":"False")+"</span></td><td>"+(ok?"виконати блок, <b>вийти</b>":"йдемо далі")+"</td></tr>";
+    if(ok){done=true;res=c[2];}
+  });
+  if(!done) html+="<tr class='hl'><td>4</td><td><code>else</code></td><td>—</td><td>виконати блок</td></tr>";
+  html+="</table><div class='box ok'><b>Вивід:</b> "+res+"</div>";
+  document.getElementById("gradeOut").innerHTML=html;
+}
+
+/* ---------- Logic table ---------- */
+function lgUpdate(){
+  const A=document.getElementById("lgA").checked, B=document.getElementById("lgB").checked;
+  const badge=v=>"<span class='badge "+(v?"t":"f")+"'>"+(v?"True":"False")+"</span>";
+  document.getElementById("lgAnd").innerHTML=badge(A&&B);
+  document.getElementById("lgOr").innerHTML=badge(A||B);
+  document.getElementById("lgNotA").innerHTML=badge(!A);
+  document.getElementById("lgNotAnd").innerHTML=badge(!(A&&B));
+}
+document.getElementById("lgA").addEventListener("change",lgUpdate);
+document.getElementById("lgB").addEventListener("change",lgUpdate);
+lgUpdate();
+
+/* ---------- Range viz ---------- */
+function rangeViz(){
+  const st=parseInt(document.getElementById("rStart").value)||0, sp=parseInt(document.getElementById("rStop").value)||0;
+  let step=parseInt(document.getElementById("rStep").value); if(!step)step=1;
+  const out=document.getElementById("rangeOut"); out.innerHTML="";
+  const nums=[]; let x=st, guard=0;
+  while(((step>0&&x<sp)||(step<0&&x>sp))&&guard<60){nums.push(x);x+=step;guard++;}
+  const lo=Math.min(st,sp), hi=Math.max(st,sp);
+  if(hi-lo>40){ out.innerHTML="<i>Діапазон завеликий для малюнка, але числа такі:</i>"; }
+  else{
+    for(let v=Math.min(lo,st);v<=hi;v++){
+      const d=document.createElement("div"); d.className="cell"; d.textContent=v;
+      if(nums.includes(v))d.classList.add("in");
+      if(v===sp)d.classList.add("stop");
+      out.appendChild(d);
+    }
+  }
+  document.getElementById("rangeTxt").textContent="Числа циклу: "+(nums.length?nums.join(", "):"(жодного — цикл не виконається)")+"   →   всього ітерацій: "+nums.length;
+}
+rangeViz();
+
+/* ---------- Nested loop grid ---------- */
+(function(){const g=document.getElementById("grid1");for(let r=0;r<3;r++)for(let c=0;c<4;c++){const d=document.createElement("div");d.className="c";d.textContent=r+","+c;d.id="g_"+r+"_"+c;g.appendChild(d);}})();
+let gridTimer=null;
+function playGrid(){
+  if(gridTimer)clearInterval(gridTimer);
+  document.querySelectorAll("#grid1 .c").forEach(d=>d.className="c");
+  let r=0,c=0,n=0;
+  gridTimer=setInterval(()=>{
+    document.querySelectorAll("#grid1 .c.on").forEach(d=>{d.classList.remove("on");d.classList.add("done");});
+    if(r>=3){clearInterval(gridTimer);document.getElementById("gridInfo").textContent="Готово: 12 ітерацій";return;}
+    document.getElementById("g_"+r+"_"+c).classList.add("on"); n++;
+    document.getElementById("gridInfo").textContent="row = "+r+", col = "+c+"   (print №"+n+")";
+    c++; if(c>=4){c=0;r++;}
+  },420);
+}
+
+/* ---------- Tracer component ---------- */
+function makeTracer(containerId, code, steps){
+  const root=document.getElementById(containerId);
+  const lines=code.split("\n");
+  root.innerHTML='<div class="tracer"><div class="lines">'+lines.map((l,i)=>'<div class="ln" data-i="'+(i+1)+'"><span class="n">'+(i+1)+'</span><span>'+highlight(l)+'</span></div>').join("")+'</div>'+
+    '<div class="state"><div class="vars"><h5>Змінні</h5><div class="vb"><i style="color:#999">поки немає</i></div></div><div class="outp"><h5>Вивід</h5><pre></pre></div><div class="note"></div></div>'+
+    '<div class="ctrl"><button class="btn small sec">⟲ Спочатку</button><button class="btn small">Крок →</button><button class="btn small sec">▶ Авто</button><span class="stepinfo"></span></div></div>';
+  const [bReset,bNext,bAuto]=root.querySelectorAll(".ctrl button");
+  const vb=root.querySelector(".vb"), outp=root.querySelector(".outp pre"), note=root.querySelector(".note"), info=root.querySelector(".stepinfo");
+  let k=-1, prevVars={}, auto=null;
+  function render(){
+    root.querySelectorAll(".ln").forEach(l=>l.classList.remove("active"));
+    if(k<0){vb.innerHTML='<i style="color:#999">поки немає</i>';outp.textContent="";note.textContent="Натисни «Крок →», щоб почати.";info.textContent="";prevVars={};return;}
+    const s=steps[k];
+    (Array.isArray(s.line)?s.line:[s.line]).forEach(ln=>{const el=root.querySelector('.ln[data-i="'+ln+'"]');if(el)el.classList.add("active");});
+    const vars=s.vars||{};
+    const keys=Object.keys(vars);
+    vb.innerHTML=keys.length?'<table>'+keys.map(key=>'<tr><td><b>'+esc(key)+'</b></td><td>'+(JSON.stringify(vars[key])!==JSON.stringify(prevVars[key])?'<span class="vchg">':'')+esc(String(vars[key]))+(JSON.stringify(vars[key])!==JSON.stringify(prevVars[key])?'</span>':'')+'</td></tr>').join("")+'</table>':'<i style="color:#999">поки немає</i>';
+    prevVars=Object.assign({},vars);
+    outp.textContent=s.out||"";
+    note.innerHTML=s.note||"";
+    info.textContent="Крок "+(k+1)+" з "+steps.length+(k===steps.length-1?" — кінець програми":"");
+    bNext.disabled=k>=steps.length-1;
+  }
+  bNext.onclick=()=>{if(k<steps.length-1){k++;render();}};
+  bReset.onclick=()=>{if(auto){clearInterval(auto);auto=null;bAuto.textContent="▶ Авто";}k=-1;render();};
+  bAuto.onclick=()=>{ if(auto){clearInterval(auto);auto=null;bAuto.textContent="▶ Авто";return;} if(k>=steps.length-1){k=-1;}
+    bAuto.textContent="⏸ Пауза"; auto=setInterval(()=>{ if(k>=steps.length-1){clearInterval(auto);auto=null;bAuto.textContent="▶ Авто";return;} k++; render(); },1500); };
+  render();
+}
+
+/* if/elif tracer */
+makeTracer("tr_if",
+`age = 15
+if age < 13:
+    print("Дитина")
+elif age < 18:
+    print("Підліток")
+else:
+    print("Дорослий")
+print("Готово")`,
+[
+ {line:1,vars:{age:15},note:"Створюємо змінну <b>age</b> зі значенням 15."},
+ {line:2,vars:{age:15},note:"Перевіряємо умову <code>age &lt; 13</code> → <code>15 &lt; 13</code> → <b>False</b>. Блок під <code>if</code> пропускаємо."},
+ {line:4,vars:{age:15},note:"Переходимо до <code>elif</code>: <code>15 &lt; 18</code> → <b>True</b>! Виконуємо цей блок."},
+ {line:5,vars:{age:15},out:"Підліток",note:"Виводимо «Підліток». Оскільки одна гілка спрацювала, <code>else</code> буде <b>пропущено</b> без перевірки."},
+ {line:8,vars:{age:15},out:"Підліток\nГотово",note:"Рядок після всієї конструкції if/elif/else виконується завжди — він без відступу."}
+]);
+
+/* for tracer */
+makeTracer("tr_for",
+`total = 0
+for n in [2, 5, 3]:
+    total = total + n
+    print(n, total)
+print("Сума:", total)`,
+[
+ {line:1,vars:{total:0},note:"Накопичувач <b>total</b> починає з 0."},
+ {line:2,vars:{total:0,n:2},note:"Цикл бере <b>перший</b> елемент списку: <code>n = 2</code>."},
+ {line:3,vars:{total:2,n:2},note:"<code>total = 0 + 2</code> → 2."},
+ {line:4,vars:{total:2,n:2},out:"2 2",note:"Виводимо n і total."},
+ {line:2,vars:{total:2,n:5},out:"2 2",note:"Повертаємось до рядка <code>for</code>. Беремо <b>наступний</b> елемент: <code>n = 5</code>."},
+ {line:3,vars:{total:7,n:5},out:"2 2",note:"<code>total = 2 + 5</code> → 7."},
+ {line:4,vars:{total:7,n:5},out:"2 2\n5 7",note:""},
+ {line:2,vars:{total:7,n:3},out:"2 2\n5 7",note:"Наступний (останній) елемент: <code>n = 3</code>."},
+ {line:3,vars:{total:10,n:3},out:"2 2\n5 7",note:"<code>total = 7 + 3</code> → 10."},
+ {line:4,vars:{total:10,n:3},out:"2 2\n5 7\n3 10",note:""},
+ {line:2,vars:{total:10,n:3},out:"2 2\n5 7\n3 10",note:"Елементи закінчились — цикл <b>завершується</b>. Переходимо до рядка після циклу (без відступу)."},
+ {line:5,vars:{total:10,n:3},out:"2 2\n5 7\n3 10\nСума: 10",note:"Результат накопичувача використовуємо після циклу."}
+]);
+
+/* while tracer */
+makeTracer("tr_while",
+`count = 3
+while count > 0:
+    print(count)
+    count = count - 1
+print("Старт!")`,
+[
+ {line:1,vars:{count:3},note:"Початкове значення <b>count = 3</b>."},
+ {line:2,vars:{count:3},note:"Перевірка: <code>3 &gt; 0</code> → <b>True</b>. Входимо в цикл."},
+ {line:3,vars:{count:3},out:"3",note:""},
+ {line:4,vars:{count:2},out:"3",note:"Зменшуємо count. Це той самий рядок, без якого цикл був би нескінченним."},
+ {line:2,vars:{count:2},out:"3",note:"Знову перевірка: <code>2 &gt; 0</code> → <b>True</b>."},
+ {line:3,vars:{count:2},out:"3\n2",note:""},
+ {line:4,vars:{count:1},out:"3\n2",note:""},
+ {line:2,vars:{count:1},out:"3\n2",note:"<code>1 &gt; 0</code> → <b>True</b>."},
+ {line:3,vars:{count:1},out:"3\n2\n1",note:""},
+ {line:4,vars:{count:0},out:"3\n2\n1",note:""},
+ {line:2,vars:{count:0},out:"3\n2\n1",note:"<code>0 &gt; 0</code> → <b>False</b>! Цикл завершується."},
+ {line:5,vars:{count:0},out:"3\n2\n1\nСтарт!",note:"Виконується код після циклу."}
+]);
+
+/* break/continue tracer */
+makeTracer("tr_break",
+`for i in range(1, 7):
+    if i == 3:
+        continue
+    if i == 5:
+        break
+    print(i)
+print("Кінець")`,
+[
+ {line:1,vars:{i:1},note:"<code>range(1, 7)</code> дає 1, 2, 3, 4, 5, 6. Перше: <b>i = 1</b>."},
+ {line:2,vars:{i:1},note:"<code>1 == 3</code> → False."},
+ {line:4,vars:{i:1},note:"<code>1 == 5</code> → False."},
+ {line:6,vars:{i:1},out:"1",note:""},
+ {line:1,vars:{i:2},out:"1",note:"<b>i = 2</b>."},
+ {line:2,vars:{i:2},out:"1",note:"False."},
+ {line:4,vars:{i:2},out:"1",note:"False."},
+ {line:6,vars:{i:2},out:"1\n2",note:""},
+ {line:1,vars:{i:3},out:"1\n2",note:"<b>i = 3</b>."},
+ {line:2,vars:{i:3},out:"1\n2",note:"<code>3 == 3</code> → <b>True</b>!"},
+ {line:3,vars:{i:3},out:"1\n2",note:"<b>continue</b>: решту тіла (рядки 4–6) пропускаємо і стрибаємо одразу до наступної ітерації. Число 3 не виводиться."},
+ {line:1,vars:{i:4},out:"1\n2",note:"<b>i = 4</b>."},
+ {line:2,vars:{i:4},out:"1\n2",note:"False."},
+ {line:4,vars:{i:4},out:"1\n2",note:"False."},
+ {line:6,vars:{i:4},out:"1\n2\n4",note:""},
+ {line:1,vars:{i:5},out:"1\n2\n4",note:"<b>i = 5</b>."},
+ {line:2,vars:{i:5},out:"1\n2\n4",note:"False."},
+ {line:4,vars:{i:5},out:"1\n2\n4",note:"<code>5 == 5</code> → <b>True</b>!"},
+ {line:5,vars:{i:5},out:"1\n2\n4",note:"<b>break</b>: виходимо з циклу повністю. 5 і 6 не будуть оброблені."},
+ {line:7,vars:{i:5},out:"1\n2\n4\nКінець",note:"Рядок після циклу."}
+]);
+
+/* function tracer */
+makeTracer("tr_func",
+`def square(x):
+    result = x * x
+    return result
+
+a = square(4)
+print(a)
+print(square(3) + 1)`,
+[
+ {line:[1,2,3],vars:{},note:"Python <b>читає</b> визначення функції і запам'ятовує її під іменем <code>square</code>. Тіло <b>не виконується</b> — поки що."},
+ {line:5,vars:{},note:"Зустріли виклик <code>square(4)</code>. Щоб присвоїти <b>a</b>, треба спершу порахувати результат — стрибаємо у функцію."},
+ {line:1,vars:{"x (локальна)":4},note:"Аргумент 4 потрапляє у параметр: <code>x = 4</code>. Змінна <b>x</b> існує лише всередині функції."},
+ {line:2,vars:{"x (локальна)":4,"result (локальна)":16},note:"<code>result = 4 * 4</code> → 16."},
+ {line:3,vars:{"x (локальна)":4,"result (локальна)":16},note:"<b>return 16</b> — функція завершується і віддає 16 туди, звідки її викликали."},
+ {line:5,vars:{a:16},note:"Повернулись. <code>square(4)</code> «перетворилось» на 16, тому <code>a = 16</code>. Локальні x і result <b>зникли</b>."},
+ {line:6,vars:{a:16},out:"16",note:""},
+ {line:7,vars:{a:16},out:"16",note:"Знову виклик — <code>square(3)</code>. Стрибаємо у функцію."},
+ {line:1,vars:{a:16,"x (локальна)":3},out:"16",note:"<code>x = 3</code>."},
+ {line:2,vars:{a:16,"x (локальна)":3,"result (локальна)":9},out:"16",note:""},
+ {line:3,vars:{a:16,"x (локальна)":3,"result (локальна)":9},out:"16",note:"Повертаємо 9."},
+ {line:7,vars:{a:16},out:"16\n10",note:"<code>square(3) + 1</code> → <code>9 + 1</code> → 10. Виводимо."}
+]);
+
+/* scope tracer */
+makeTracer("tr_scope",
+`x = 10
+def change():
+    x = 5
+    print("всередині:", x)
+change()
+print("зовні:", x)`,
+[
+ {line:1,vars:{"x (глобальна)":10},note:"Глобальна змінна <b>x = 10</b>."},
+ {line:[2,3,4],vars:{"x (глобальна)":10},note:"Запам'ятовуємо функцію. Не виконуємо."},
+ {line:5,vars:{"x (глобальна)":10},note:"Виклик <code>change()</code>."},
+ {line:3,vars:{"x (глобальна)":10,"x (локальна)":5},note:"Усередині функції створюється <b>нова, окрема</b> змінна x = 5. Глобальна x лишається 10!"},
+ {line:4,vars:{"x (глобальна)":10,"x (локальна)":5},out:"всередині: 5",note:"Функція бачить свою локальну x."},
+ {line:5,vars:{"x (глобальна)":10},out:"всередині: 5",note:"Функція завершилась (return немає — повертається None). Локальна x знищена."},
+ {line:6,vars:{"x (глобальна)":10},out:"всередині: 5\nзовні: 10",note:"Зовні x як була 10, так і лишилась."}
+]);
+
+/* ---------- Function machine ---------- */
+const FM={
+  square:{params:["x"],fn:v=>v[0]*v[0],body:"x * x",show:v=>v[0]+" * "+v[0]},
+  add:{params:["a","b"],fn:v=>v[0]+v[1],body:"a + b",show:v=>v[0]+" + "+v[1]},
+  is_even:{params:["n"],fn:v=>(v[0]%2===0?"True":"False"),body:"n % 2 == 0",show:v=>v[0]+" % 2 == 0  →  "+(v[0]%2)+" == 0"},
+  area:{params:["w","h"],defaults:{h:1},fn:v=>v[0]*v[1],body:"w * h",show:v=>v[0]+" * "+v[1]}
+};
+function fmSetup(){
+  const f=FM[document.getElementById("fmSel").value];
+  document.getElementById("fmInputs").innerHTML=f.params.map(p=>' <label>'+p+' = <input type="number" id="fm_'+p+'" value="'+(f.defaults&&f.defaults[p]!==undefined?"":"3")+'" placeholder="'+(f.defaults&&f.defaults[p]!==undefined?"за замовч.: "+f.defaults[p]:"")+'" style="width:110px"></label>').join("");
+  document.getElementById("fmOut").innerHTML="";
+}
+function fmRun(){
+  const name=document.getElementById("fmSel").value, f=FM[name];
+  const vals=[], shown=[];
+  f.params.forEach(p=>{ const raw=document.getElementById("fm_"+p).value; let v;
+    if(raw===""&&f.defaults&&f.defaults[p]!==undefined){v=f.defaults[p];shown.push(p+" = "+v+" (за замовчуванням)");}
+    else{v=parseFloat(raw)||0;shown.push(p+" = "+v);} vals.push(v);});
+  const res=f.fn(vals);
+  document.getElementById("fmOut").innerHTML='<div class="machine"><div class="mbox" style="border-color:var(--accent);background:var(--accent-soft)">'+shown.join("<br>")+'</div><div class="marr">→</div><div class="mbox">'+name+'('+f.params.join(", ")+')<br><small style="font-weight:400">return '+esc(f.body)+'</small></div><div class="marr">→</div><div class="mout">'+esc(String(res))+'</div></div>'+
+   '<div class="box ok"><b>Що сталось</b> 1) Аргументи підставились у параметри: '+shown.join(", ")+'.<br>2) Обчислили <code>'+esc(f.show(vals))+'</code> = <b>'+esc(String(res))+'</b>.<br>3) <code>return</code> віддав це значення назовні — тепер його можна зберегти у змінну або вивести.</div>';
+}
+fmSetup();
+
+/* ---------- FizzBuzz ---------- */
+function runFB(){
+  const n=parseInt(document.getElementById("fbIn").value)||0;
+  const checks=[["n % 15 == 0",n%15===0,"FizzBuzz"],["n % 3 == 0",n%3===0,"Fizz"],["n % 5 == 0",n%5===0,"Buzz"]];
+  let html="<table><tr><th>Перевірка</th><th>Обчислення</th><th>Результат</th></tr>", done=false, res=String(n);
+  checks.forEach(c=>{ if(done){html+="<tr><td><code>"+c[0]+"</code></td><td colspan=2 style='color:#999'>пропущено</td></tr>";return;}
+    const m=parseInt(c[0].split("%")[1]);
+    html+="<tr class='"+(c[1]?"hl":"")+"'><td><code>"+c[0]+"</code></td><td>"+n+" % "+m+" = "+(n%m)+"</td><td><span class='badge "+(c[1]?"t":"f")+"'>"+(c[1]?"True":"False")+"</span></td></tr>";
+    if(c[1]){done=true;res=c[2];} });
+  html+="</table><div class='box ok'><b>return</b> \""+res+"\"</div>";
+  document.getElementById("fbOut").innerHTML=html;
+}
+
+/* ---------- Blanks ---------- */
+function checkBlanks(id){
+  const root=document.getElementById(id); let all=true;
+  root.querySelectorAll(".blank").forEach(b=>{ const ok=b.value.trim().replace(/\s+/g,"")===b.dataset.a; b.classList.toggle("ok",ok); b.classList.toggle("bad",!ok); if(!ok)all=false; });
+  const r=document.getElementById(id+"_res");
+  if(all){ r.innerHTML="<b style='color:var(--green)'>✅ Усе правильно!</b>"; progress[id]=true; saveProgress(); }
+  else r.innerHTML="<b style='color:var(--red)'>Є помилки — червоні поля треба виправити.</b>";
+}
+
+/* ---------- Quiz engine ---------- */
+function pre(s){return '<span class="pre-inline">'+highlight(s)+'</span>';}
+function makeQuiz(id, questions, onDone){
+  const root=document.getElementById(id); let answered=0, correct=0;
+  questions.forEach((q,qi)=>{
+    const d=document.createElement("div"); d.className="q";
+    d.innerHTML='<div class="qt">'+q.q+'</div>'+q.o.map((o,i)=>'<span class="opt" data-i="'+i+'">'+o+'</span>').join("")+'<div class="expl"></div>';
+    const expl=d.querySelector(".expl");
+    d.querySelectorAll(".opt").forEach(opt=>opt.onclick=()=>{
+      if(d.dataset.done)return; d.dataset.done=1; answered++;
+      const i=+opt.dataset.i; const ok=i===q.a; if(ok)correct++;
+      d.querySelectorAll(".opt").forEach(x=>{x.classList.add("disabled"); if(+x.dataset.i===q.a)x.classList.add("correct");});
+      if(!ok)opt.classList.add("wrong");
+      expl.innerHTML=(ok?"<b style='color:var(--green)'>✅ Правильно!</b> ":"<b style='color:var(--red)'>❌ Неправильно.</b> ")+q.e; expl.classList.add("show");
+      if(answered===questions.length){ const s=document.createElement("div"); s.className="qsum"; s.innerHTML="Результат: "+correct+" з "+questions.length+(correct===questions.length?" — ідеально! 🎉":correct>=questions.length*0.7?" — добре, але переглянь питання з помилками.":" — варто перечитати розділ і пройти тест ще раз.")+' <button class="btn small sec" onclick="location.reload()">Пройти ще раз</button>'; root.appendChild(s); progress[id]=true; saveProgress(); if(onDone)onDone(correct); }
+    });
+    root.appendChild(d);
+  });
+}
+
+makeQuiz("quiz_cond",[
+ {q:"Що виведе цей код?"+pre('x = 10\nif x > 5:\n    print("A")\nelif x > 8:\n    print("B")\nelse:\n    print("C")'),o:["A","B","A і B","C"],a:0,e:"Умови перевіряються по черзі. <code>10 &gt; 5</code> — True, виводиться A, і решта гілок <b>пропускається</b>, навіть якщо вони теж правдиві."},
+ {q:"Який рядок містить помилку?",o:["<code>if x == 5:</code>","<code>if x = 5:</code>","<code>if x &gt;= 5:</code>","<code>if x != 5:</code>"],a:1,e:"<code>=</code> — це присвоєння, а не порівняння. В умові потрібно <code>==</code>."},
+ {q:"Що дасть вираз <code>True and False or True</code>?",o:["True","False","Помилка"],a:0,e:"<code>and</code> виконується раніше за <code>or</code>: <code>(True and False) or True</code> → <code>False or True</code> → True."},
+ {q:"Що виведе код?"+pre('name = ""\nif name:\n    print("є ім\'я")\nelse:\n    print("порожньо")'),o:["є ім'я","порожньо","Помилка"],a:1,e:"Порожній рядок в умові — це <code>False</code>. Тому виконується <code>else</code>."},
+ {q:"Користувач ввів 20. Що станеться?"+pre('age = input("Вік: ")\nif age >= 18:\n    print("ok")'),o:["Виведе ok","Нічого не виведе","Помилка TypeError"],a:2,e:"<code>input()</code> повертає рядок <code>\"20\"</code>, а рядок не можна порівнювати з числом знаком <code>&gt;=</code>. Потрібно <code>int(input(...))</code>."},
+ {q:"Що виведе код при <code>n = 15</code>?"+pre('if n % 3 == 0:\n    print("три")\nelif n % 5 == 0:\n    print("п\'ять")'),o:["три","п'ять","три і п'ять","нічого"],a:0,e:"15 ділиться і на 3, і на 5, але перша ж правдива умова (<code>n % 3 == 0</code>) зупиняє перевірку. Виводиться лише «три»."},
+ {q:"Як правильно перевірити, що <code>x</code> дорівнює 1, 2 або 3?",o:["<code>if x == 1 or 2 or 3:</code>","<code>if x == 1 or x == 2 or x == 3:</code>","<code>if x == (1, 2, 3):</code>"],a:1,e:"Перший варіант завжди True, бо <code>2</code> саме по собі «правдиве». Правильний — повне порівняння кожного, або <code>if x in (1, 2, 3):</code>."},
+ {q:"Що виведе код?"+pre('a = 3\nb = 7\nresult = "більше" if a > b else "менше"\nprint(result)'),o:["більше","менше","3","Помилка"],a:1,e:"Тернарний оператор: <code>3 &gt; 7</code> → False, тому береться значення після <code>else</code> — «менше»."}
+]);
+
+makeQuiz("quiz_loops",[
+ {q:"Скільки разів виконається <code>print</code>?"+pre('for i in range(3, 8):\n    print(i)'),o:["3","5","6","8"],a:1,e:"<code>range(3, 8)</code> дає 3, 4, 5, 6, 7 — п'ять чисел. Межа 8 не входить."},
+ {q:"Що виведе код?"+pre('for i in range(0, 10, 3):\n    print(i, end=" ")'),o:["0 3 6 9","0 3 6 9 10","3 6 9","0 1 2 3"],a:0,e:"Крок 3: 0, 3, 6, 9. Наступне було б 12, але воно ≥ 10 — не входить."},
+ {q:"Що не так із цим кодом?"+pre('n = 5\nwhile n > 0:\n    print(n)'),o:["Відсутня двокрапка","Цикл нескінченний","n має бути рядком","Усе гаразд"],a:1,e:"<code>n</code> ніколи не змінюється, тому <code>n &gt; 0</code> завжди True. Потрібно <code>n -= 1</code> у тілі циклу."},
+ {q:"Що виведе код?"+pre('for i in range(5):\n    if i == 2:\n        break\n    print(i)'),o:["0 1","0 1 2","0 1 3 4","0 1 2 3 4"],a:0,e:"<code>break</code> при i == 2 повністю зупиняє цикл. Виводяться лише 0 і 1."},
+ {q:"А якщо замінити <code>break</code> на <code>continue</code>?"+pre('for i in range(5):\n    if i == 2:\n        continue\n    print(i)'),o:["0 1","0 1 2","0 1 3 4","0 1 2 3 4"],a:2,e:"<code>continue</code> пропускає тільки ітерацію з i == 2 і йде далі. Виводяться 0, 1, 3, 4."},
+ {q:"Чому дорівнює <code>total</code> після циклу?"+pre('total = 0\nfor n in [1, 2, 3, 4]:\n    total += n\nprint(total)'),o:["4","10","24","0"],a:1,e:"Накопичувач: 0+1+2+3+4 = 10."},
+ {q:"Скільки разів виконається <code>print</code>?"+pre('for a in range(2):\n    for b in range(3):\n        print(a, b)'),o:["2","3","5","6"],a:3,e:"Вкладені цикли: зовнішній 2 рази × внутрішній 3 рази = 6."},
+ {q:"Що виведе код?"+pre('word = "abc"\nfor ch in word:\n    print(ch, end="-")'),o:["abc-","a-b-c-","a b c","Помилка"],a:1,e:"Цикл іде по кожній літері, після кожної ставить «-»."},
+ {q:"Яку конструкцію краще використати, щоб питати пароль, поки він неправильний?",o:["<code>for i in range(3):</code>","<code>while password != \"1234\":</code>","<code>if password != \"1234\":</code>"],a:1,e:"Кількість спроб невідома наперед — це задача для <code>while</code>. <code>if</code> перевірить лише один раз, <code>for</code> — фіксовану кількість."},
+ {q:"Чому дорівнює <code>count</code>?"+pre('count = 0\nfor n in [5, 12, 3, 20, 8]:\n    if n > 7:\n        count += 1\nprint(count)'),o:["2","3","5","48"],a:1,e:"Більші за 7: 12, 20, 8 — три числа."}
+]);
+
+makeQuiz("quiz_funcs",[
+ {q:"Що виведе код?"+pre('def hello():\n    print("Привіт")\n\nhello\nhello()'),o:["Привіт","Привіт Привіт","Нічого","Помилка"],a:0,e:"Рядок <code>hello</code> без дужок нічого не робить — це просто посилання на функцію. Лише <code>hello()</code> викликає її. Тому одне «Привіт»."},
+ {q:"Що виведе код?"+pre('def add(a, b):\n    print(a + b)\n\nx = add(2, 3)\nprint(x)'),o:["5 і 5","5 і None","None","Помилка"],a:1,e:"Перший <code>print</code> всередині функції виводить 5. Але функція нічого не <code>return</code>-ить, тому <code>x = None</code>, і другий print виводить None."},
+ {q:"Що виведе код?"+pre('def f(n):\n    return n * 2\n    print("готово")\n\nprint(f(4))'),o:["8","готово 8","8 готово","Помилка"],a:0,e:"Після <code>return</code> функція завершується. Рядок <code>print(\"готово\")</code> ніколи не виконується."},
+ {q:"Що виведе код?"+pre('def show(name, greeting="Привіт"):\n    print(greeting, name)\n\nshow("Оля")\nshow("Іван", "Добрий день")'),o:["Привіт Оля / Добрий день Іван","Привіт Оля / Привіт Іван","Помилка"],a:0,e:"Другий параметр має значення за замовчуванням. Якщо його не передати — береться «Привіт», якщо передати — наше."},
+ {q:"Що виведе код?"+pre('x = 1\ndef f():\n    x = 100\nf()\nprint(x)'),o:["1","100","Помилка"],a:0,e:"Усередині функції створюється локальна змінна x, яка не впливає на глобальну. Після виклику глобальна x = 1."},
+ {q:"Що станеться?"+pre('def area(w, h):\n    return w * h\n\nprint(area(5))'),o:["25","5","0","Помилка TypeError"],a:3,e:"Функція вимагає два аргументи, передано один. Python повідомить: missing 1 required positional argument."},
+ {q:"У чому головна різниця між <code>print</code> і <code>return</code>?",o:["Немає різниці","print показує на екрані, return віддає значення програмі","return показує на екрані, print віддає значення"],a:1,e:"<code>print</code> — для людини (показати), <code>return</code> — для програми (використати далі)."},
+ {q:"Що виведе код?"+pre('def double(n):\n    return n * 2\n\nprint(double(double(3)))'),o:["6","12","9","33"],a:1,e:"Спочатку внутрішній виклик: <code>double(3)</code> = 6. Потім <code>double(6)</code> = 12."},
+ {q:"Який запис визначає функцію правильно?",o:["<code>def my_func:</code>","<code>def my_func()</code>","<code>def my_func():</code>","<code>function my_func():</code>"],a:2,e:"Потрібні і дужки, і двокрапка. Слово <code>function</code> — з інших мов, у Python — <code>def</code>."}
+]);
+
+makeQuiz("quiz_final",[
+ {q:"Що виведе код?"+pre('x = 7\nif x % 2 == 0:\n    print("парне")\nelse:\n    print("непарне")'),o:["парне","непарне","7"],a:1,e:"7 % 2 = 1, не 0 → else."},
+ {q:"Скільки чисел дає <code>range(1, 10, 2)</code>?",o:["4","5","9","10"],a:1,e:"1, 3, 5, 7, 9 — п'ять чисел."},
+ {q:"Що виведе код?"+pre('def f(a, b=10):\n    return a + b\nprint(f(5))'),o:["5","15","Помилка"],a:1,e:"b за замовчуванням 10: 5 + 10 = 15."},
+ {q:"Що виведе код?"+pre('for i in range(1, 6):\n    if i % 2 == 0:\n        continue\n    print(i, end=" ")'),o:["1 3 5","2 4","1 2 3 4 5","1"],a:0,e:"Парні пропускаються через continue. Залишаються 1, 3, 5."},
+ {q:"Що виведе код?"+pre('count = 0\nwhile count < 3:\n    count += 1\nprint(count)'),o:["0","2","3","Нескінченний цикл"],a:2,e:"count стає 1, 2, 3; при 3 умова <code>3 &lt; 3</code> False → вихід. Виводить 3."},
+ {q:"Що виведе код?"+pre('def check(n):\n    if n > 10:\n        return "великий"\n    return "малий"\n\nprint(check(10))'),o:["великий","малий","None"],a:1,e:"<code>10 &gt; 10</code> — False, тому перший return не спрацьовує, виконується другий."},
+ {q:"Що виведе код?"+pre('a = 5\nb = 0\nif b != 0 and a / b > 1:\n    print("так")\nelse:\n    print("ні")'),o:["так","ні","Помилка ZeroDivisionError"],a:1,e:"<code>b != 0</code> — False, і Python <b>не обчислює</b> другу частину <code>and</code> (це називається «коротке замикання»), тому ділення на нуль не стається. Виводить «ні»."},
+ {q:"Чому дорівнює <code>result</code>?"+pre('def f(nums):\n    total = 0\n    for n in nums:\n        if n > 0:\n            total += n\n    return total\n\nresult = f([3, -1, 4, -5])'),o:["1","7","12","-6"],a:1,e:"Додаються лише додатні: 3 + 4 = 7."},
+ {q:"Скільки разів виведеться «x»?"+pre('for i in range(3):\n    for j in range(i):\n        print("x")'),o:["3","6","9","0"],a:0,e:"i=0 → range(0) → 0 разів; i=1 → 1 раз; i=2 → 2 рази. Разом 3."},
+ {q:"Що виведе код?"+pre('def f():\n    y = 5\nf()\nprint(y)'),o:["5","None","NameError"],a:2,e:"y — локальна змінна функції. Зовні вона не існує."},
+ {q:"Що виведе код?"+pre('n = 4\nif n > 2:\n    if n > 5:\n        print("A")\n    else:\n        print("B")\nelse:\n    print("C")'),o:["A","B","C"],a:1,e:"4 &gt; 2 → заходимо всередину. 4 &gt; 5 — False → внутрішній else → B."},
+ {q:"Що виведе код?"+pre('def is_pos(n):\n    return n > 0\n\nres = 0\nfor x in [2, -3, 7]:\n    if is_pos(x):\n        res += 1\nprint(res)'),o:["2","3","6","True"],a:0,e:"Функція повертає True для 2 і 7 → лічильник = 2."}
+],function(correct){
+  document.getElementById("finalScore").innerHTML='<div class="score">'+(correct>=10?"🏆 Чудово! "+correct+"/12 — три теми засвоєно.":correct>=7?"👍 Непогано: "+correct+"/12. Переглянь питання з помилками і відповідні розділи.":"📖 "+correct+"/12 — повернись до розділів, пройди трасувальники ще раз і спробуй знову.")+'</div>';
+});
+
+/* ---------- Pyodide playground ---------- */
+const PY_EX={
+ex1:`age = 17
+if age >= 18:
+    print("Дорослий")
+elif age >= 13:
+    print("Підліток")
+else:
+    print("Дитина")`,
+ex2:`total = 0
+for i in range(1, 11):
+    total += i
+    print("i =", i, "total =", total)
+print("Сума 1..10 =", total)`,
+ex3:`n = 10
+while n > 0:
+    print(n, end=" ")
+    n -= 3
+print("\\nКінець, n =", n)`,
+ex4:`def greet(name, greeting="Привіт"):
+    return greeting + ", " + name + "!"
+
+print(greet("Оля"))
+print(greet("Іван", "Добрий день"))
+
+def is_even(n):
+    return n % 2 == 0
+
+for i in range(1, 8):
+    print(i, "парне" if is_even(i) else "непарне")`,
+ex5:`def fizzbuzz(n):
+    if n % 15 == 0:
+        return "FizzBuzz"
+    elif n % 3 == 0:
+        return "Fizz"
+    elif n % 5 == 0:
+        return "Buzz"
+    return str(n)
+
+for i in range(1, 31):
+    print(fizzbuzz(i), end=" ")`
+};
+function setPy(k){document.getElementById("pyCode").value=PY_EX[k];}
+let pyodide=null;
+async function loadPy(){
+  const st=document.getElementById("pyStatus"), btn=document.getElementById("pyLoadBtn");
+  btn.disabled=true; st.textContent=" Завантаження (~10 МБ, зачекай)…";
+  try{
+    await new Promise((res,rej)=>{const s=document.createElement("script");s.src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js";s.onload=res;s.onerror=rej;document.head.appendChild(s);});
+    pyodide=await loadPyodide();
+    st.textContent=" ✅ Python готовий!"; btn.style.display="none"; document.getElementById("pyRunBtn").disabled=false;
+  }catch(e){ st.textContent=" ❌ Не вдалося завантажити. Перевір інтернет або запускай код у власному редакторі."; btn.disabled=false; }
+}
+async function runPy(){
+  if(!pyodide)return;
+  const out=document.getElementById("pyOut"); out.className="pyout"; out.textContent="";
+  let buf="";
+  pyodide.setStdout({batched:s=>{buf+=s+"\n";}});
+  pyodide.setStderr({batched:s=>{buf+=s+"\n";}});
+  pyodide.globals.set("input", (p)=>{ const v=prompt(p||""); buf+=(p||"")+(v??"")+"\n"; return v??""; });
+  try{ await pyodide.runPythonAsync(document.getElementById("pyCode").value); out.textContent=buf||"(програма нічого не вивела)"; }
+  catch(e){ out.className="pyout err"; let msg=String(e.message||e); const idx=msg.lastIndexOf("\n",msg.length-2); out.textContent=buf+"\n❌ Помилка:\n"+msg.split("\n").filter(l=>l.trim()).slice(-3).join("\n"); }
+}
+document.getElementById("pyCode").addEventListener("keydown",e=>{ if(e.ctrlKey&&e.key==="Enter"){e.preventDefault();runPy();} if(e.key==="Tab"){e.preventDefault();const t=e.target,s=t.selectionStart;t.value=t.value.slice(0,s)+"    "+t.value.slice(t.selectionEnd);t.selectionStart=t.selectionEnd=s+4;} });
+</script>
+</body>
+</html>
